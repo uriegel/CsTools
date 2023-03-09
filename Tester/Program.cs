@@ -1,4 +1,5 @@
 ﻿using CsTools.Extensions;
 
-var stream = Resources.Get("text/README");
-var s = stream;
+using var stream = Resources.Get("text/README");
+using var file = File.Create("./test.md");
+stream.CopyTo(file);

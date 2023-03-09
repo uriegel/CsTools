@@ -4,7 +4,7 @@
   <targetFramework>netstandard2.0</targetFramework>
 	<ImplicitUsings>enable</ImplicitUsings>
 	<Nullable>enable</Nullable>
-	<Version>0.0.1-alpha.3</Version>
+	<Version>0.0.1-alpha.4</Version>
 	<FileVersion>0.0.1.0</FileVersion>
 	<AssemblyVersion>0.0.1.0</AssemblyVersion>
 	<Authors>Uwe Riegel</Authors>
