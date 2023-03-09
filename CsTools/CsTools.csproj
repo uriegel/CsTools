@@ -9,7 +9,8 @@
 	<AssemblyVersion>0.0.1.0</AssemblyVersion>
 	<Authors>Uwe Riegel</Authors>
 	<Company>Uwe Riegel</Company>		
-	<Description>Tools and extensions for C#</Description>
+	<Description>Tools for C#, mostly functional extensions for .NET Objects</Description>
+    <PackageTags>CSharp;C#;.NET;Functional</PackageTags>
 	<PackageLicenseUrl></PackageLicenseUrl>
 	<PackageProjectUrl>https://github.com/uriegel/CsTools</PackageProjectUrl>
 	<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -17,7 +18,13 @@
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>		    
 	<LangVersion>10</LangVersion>
+    <NoWarn>CS1591</NoWarn>    
 </PropertyGroup>
+
+<PropertyGroup>
+	<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+</PropertyGroup>
+
 
 <ItemGroup>
 	<None Include="..\README.md" Pack="true" PackagePath="\" />

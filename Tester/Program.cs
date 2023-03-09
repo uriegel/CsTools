@@ -1,2 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using CsTools.Extensions;
+
+var stream = Resources.Get("text/README");
+var s = stream;

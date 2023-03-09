@@ -2,7 +2,6 @@ namespace CsTools.Extensions;
 
 public static class StringExtensions
 {
-
     public static string SubstringAfter(this string? str, char startChar)
     {
         var posStart = str?.IndexOf(startChar) + 1 ?? -1;

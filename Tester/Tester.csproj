@@ -7,15 +7,15 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
-    <PackageTags>CSharp;C#;.NET;Functional</PackageTags>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Description>Tools for C#, mostly functional extensions for .NET Objects</Description>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>FS0067</NoWarn>    
   </PropertyGroup>
-  <PropertyGroup>
-    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="../README.md">
+      <LogicalName>text/README</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
 
 </Project>
