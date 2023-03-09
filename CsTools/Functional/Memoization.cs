@@ -4,7 +4,7 @@ using LinqTools;
 namespace CsTools.Functional;
 
 /// <summary>
-/// Funktionen zum Cachen von Funktionsrückgabewerten. Das Cachen lässt sich mit Hilfe des Resetters zurücksetzen
+/// Functions for caching function return values. Caching can be reset with the help of the resetter
 /// </summary>
 public static class Memoization
 {
@@ -143,7 +143,7 @@ public static class Memoization
 						? await functionToMemoize(id, (cacheDictionary.TryGetValue(id, out result) ? result : null)?.Value.value)
 						: null, true));
 
-					cacheDictionary = cacheDictionary.Add(id, refcell!);
+					cacheDictionary = cacheDictionary.SetItem(id, refcell!);
 					return refcell.Value.value;
 				}
 				finally
@@ -192,7 +192,7 @@ public static class Memoization
                         ? functionToMemoize(id, (cacheDictionary.TryGetValue(id, out result) ? result : null)?.Value.value)
                         : null, true));
 
-					cacheDictionary = cacheDictionary.Add(id, refcell!);
+					cacheDictionary = cacheDictionary.SetItem(id, refcell!);
                     return refcell.Value.value;
                 }
             }

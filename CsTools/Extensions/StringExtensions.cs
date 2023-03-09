@@ -30,5 +30,3 @@ public static class StringExtensions
             ? val
             : null;
 }
-
-// TODO xml doku in nuget
