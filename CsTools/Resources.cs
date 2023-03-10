@@ -20,9 +20,4 @@ public static class Resources
         => Assembly
             .GetEntryAssembly()
             .GetManifestResourceStream(path);
-
-    public static Stream GetFromThis(string path)
-        => Assembly
-            .GetExecutingAssembly()
-            .GetManifestResourceStream(path);
 }
