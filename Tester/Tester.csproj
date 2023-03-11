@@ -12,10 +12,4 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
-<  <ItemGroup>
-    <EmbeddedResource Include="../README.md">
-      <LogicalName>text/README</LogicalName>
-    </EmbeddedResource>
-  </ItemGroup>
->
 </Project>

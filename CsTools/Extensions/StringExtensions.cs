@@ -1,3 +1,5 @@
+using static LinqTools.Core;
+
 namespace CsTools.Extensions;
 
 public static class StringExtensions
@@ -28,4 +30,8 @@ public static class StringExtensions
         => int.TryParse(str, out var val)
             ? val
             : null;
-}
+
+    public static string? GetEnvironmentVariable(this string key)
+        => ExceptionToNull(() => Environment.GetEnvironmentVariable(key) ?? throw new Exception());
+}            
+
