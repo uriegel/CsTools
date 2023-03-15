@@ -1,3 +1,4 @@
+using LinqTools;
 using static LinqTools.Core;
 
 namespace CsTools.Extensions;
@@ -81,5 +82,17 @@ public static class StringExtensions
     /// <exception cref="Exception"></exception>
     public static string? GetEnvironmentVariable(this string key)
         => ExceptionToNull(() => Environment.GetEnvironmentVariable(key) ?? throw new Exception());
+
+    /// <summary>
+    /// Ensures, that the given directory path exists, otherwise it creates the directory
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public static string EnsureDirectoryExists(this string path)
+        => path.SideEffect(p => 
+            {
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+            });        
 }            
 
