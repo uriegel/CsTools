@@ -31,6 +31,15 @@ public static class StringExtensions
             ? val
             : null;
 
+    /// <summary>
+    /// Parses a string to get a long value, returning null if parsing not possible
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
+    public static long? ParseLong(this string? str)
+        => long.TryParse(str, out var val)
+            ? val
+            : null;
     public static string? GetEnvironmentVariable(this string key)
         => ExceptionToNull(() => Environment.GetEnvironmentVariable(key) ?? throw new Exception());
 }            
