@@ -94,5 +94,14 @@ public static class StringExtensions
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
             });        
+
+    /// <summary>
+    /// Appends the given subpath to this path
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="subPath"></param>
+    /// <returns></returns>
+    public static string AppendPath(this string path, string subPath)
+        => Path.Combine(path, subPath);
 }            
 
