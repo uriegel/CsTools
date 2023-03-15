@@ -103,5 +103,13 @@ public static class StringExtensions
     /// <returns></returns>
     public static string AppendPath(this string path, string subPath)
         => Path.Combine(path, subPath);
+
+    /// <summary>
+    /// Creates a file from this path
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public static Stream CreateFile(this string path)
+        => File.Create(path);
 }            
 
