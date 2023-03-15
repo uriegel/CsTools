@@ -62,7 +62,8 @@ public static class StringExtensions
     /// <returns></returns>
     public static string? WhiteSpaceToNull(this string? str)
         => string.IsNullOrWhiteSpace(str) ? null : str;
-            /// <summary>
+    
+    /// <summary>
     /// Retrieving an environment variable using this string as the key
     /// </summary>
     /// <param name="key"></param>
