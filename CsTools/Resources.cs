@@ -13,11 +13,11 @@ public static class Resources
     /// <param name="assembly">Assembly containing the desired resource</param>
     /// <param name="path">Path to the resource</param>
     /// <returns>A resource stream</returns>
-    public static Stream Get(this Assembly assembly, string path)
+    public static Stream? Get(this Assembly assembly, string path)
         => assembly.GetManifestResourceStream(path);
 
-    public static Stream Get(string path)
+    public static Stream? Get(string path)
         => Assembly
             .GetEntryAssembly()
-            .GetManifestResourceStream(path);
+            ?.GetManifestResourceStream(path);
 }

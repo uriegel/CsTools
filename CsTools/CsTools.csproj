@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 <PropertyGroup>
-  <targetFramework>netstandard2.0</targetFramework>
+  <targetFramework>net6.0</targetFramework>
 	<ImplicitUsings>enable</ImplicitUsings>
 	<Nullable>enable</Nullable>
-	<Version>1.1.0</Version>
-	<FileVersion>1.1.0.0</FileVersion>
-	<AssemblyVersion>1.1.0.0</AssemblyVersion>
+	<Version>2.0.0</Version>
+	<FileVersion>2.0.0.0</FileVersion>
+	<AssemblyVersion>2.0.0.0</AssemblyVersion>
 	<Authors>Uwe Riegel</Authors>
 	<Company>Uwe Riegel</Company>		
 	<Description>Tools for C#, mostly functional extensions for .NET Objects</Description>
@@ -34,8 +34,7 @@
 </ItemGroup>
 
 <ItemGroup>
-  <PackageReference Include="LinqTools" Version="1.0.0" />
-  <PackageReference Include="System.Collections.Immutable" Version="7.0.0" />
+  <PackageReference Include="LinqTools" Version="1.1.0" />
 </ItemGroup>
 
 </Project>
