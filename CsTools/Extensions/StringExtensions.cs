@@ -91,8 +91,8 @@ public static class StringExtensions
     public static string EnsureDirectoryExists(this string path)
         => path.SideEffect(p => 
             {
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
+                if (!System.IO.Directory.Exists(path))
+                    System.IO.Directory.CreateDirectory(path);
             });        
 
     /// <summary>
@@ -111,5 +111,14 @@ public static class StringExtensions
     /// <returns></returns>
     public static Stream CreateFile(this string path)
         => File.Create(path);
+
+    /// <summary>
+    /// Opens a file readonly from this path
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public static Stream OpenFile(this string path)
+        => File.OpenRead(path);
+
 }            
 

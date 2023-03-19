@@ -2,7 +2,7 @@ using LinqTools;
 using CsTools.Extensions;
 
 using static LinqTools.Core;
-using static Core;
+using static CsTools.Core;
 
 namespace CsTools;
 

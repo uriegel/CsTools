@@ -4,7 +4,7 @@ namespace CsTools.Extensions;
 
 /// <summary>
 /// 
-/// </summary>Extensio Methods for retrieving resources
+/// </summary>Extension Methods for retrieving resources
 public static class Resources
 {
     /// <summary>
