@@ -149,6 +149,12 @@ public class ExifReader : IDisposable
         }
     }
 
+    public DateTime? GetDateTime(ExifTag tagId)
+        => DateTime.TryParseExact(GetTagValue<string>(tagId)?.TrimEnd('\0') ?? "", "yyyy:MM:dd HH:mm:ss", 
+                CultureInfo.InvariantCulture, DateTimeStyles.None, out var dt)
+            ? dt
+            : null;
+
     public T? GetTagValue<T>(ExifTag tagId)
         where T: class
     {

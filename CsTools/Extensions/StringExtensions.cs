@@ -119,6 +119,5 @@ public static class StringExtensions
     /// <returns></returns>
     public static Stream OpenFile(this string path)
         => File.OpenRead(path);
-
 }            
 
