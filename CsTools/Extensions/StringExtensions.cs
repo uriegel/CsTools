@@ -1,3 +1,4 @@
+using System.Globalization;
 using LinqTools;
 using static LinqTools.Core;
 
@@ -119,5 +120,27 @@ public static class StringExtensions
     /// <returns></returns>
     public static Stream OpenFile(this string path)
         => File.OpenRead(path);
+
+    /// <summary>
+    /// Converting a DateTime string to a DateTime value if possible, otherwise returns null
+    /// </summary>
+    /// <param name="dateTimeStr"></param>
+    /// <param name="format"></param>
+    /// <returns></returns>
+    public static DateTime? ToDateTime(this string? dateTimeStr, string format)
+        => ToDateTime(dateTimeStr, format, CultureInfo.InvariantCulture);
+
+    /// <summary>
+    /// Converting a DateTime string to a DateTime value if possible, otherwise returns null
+    /// </summary>
+    /// <param name="dateTimeStr"></param>
+    /// <param name="format"></param>
+    /// <param name="culture"></param>
+    /// <returns></returns>
+    public static  DateTime? ToDateTime(this string? dateTimeStr, string format, CultureInfo culture)
+        => DateTime.TryParseExact(dateTimeStr?.TrimEnd('\0') ?? "", format, 
+                culture, DateTimeStyles.None, out var dt)
+            ? dt
+            : null;
 }            
 
