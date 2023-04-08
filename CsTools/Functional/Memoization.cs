@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using LinqTools;
+using LinqTools.Nullable;
 
 namespace CsTools.Functional;
 
