@@ -8,11 +8,15 @@ namespace CsTools.HttpRequest;
 public static class Request
 {
     public static Task<HttpResponseMessage> RunAsync(Settings settings)
-        => RawRunAsync(settings)
+        => RawRunAsync(settings, false)
+            .MapRequestException();
+
+    public static Task<HttpResponseMessage> RunAsync(Settings settings, bool onlyHeaders)
+        => RawRunAsync(settings, onlyHeaders)
             .MapRequestException();
 
     public static Task<string> GetStringAsync(Settings settings)
-        =>(from n in RawRunAsync(settings)
+        =>(from n in RawRunAsync(settings, false)
            from m in n.Content.ReadAsStringAsync()
            select m)
             .MapRequestException();
@@ -23,6 +27,11 @@ public static class Request
     public static Func<Task<string>> GetStringAsyncApply(Settings settings)
         => () => GetStringAsync(settings);
 
+    /// <summary>
+    /// Gets the response stream as LengthStream with content length
+    /// </summary>
+    /// <param name="msg"></param>
+    /// <returns></returns>
     public static Stream GetResponseStream(this HttpResponseMessage msg)
         => msg
             .Content
@@ -48,13 +57,13 @@ public static class Request
         settings.Headers?.ForEach(n => AddHeader(n));
     }
 
-    static async Task<HttpResponseMessage> RawRunAsync(Settings settings)
+    static async Task<HttpResponseMessage> RawRunAsync(Settings settings, bool onlyHeaders)
     {
         var request = CreateRequest(settings);
         if (settings.AddContent != null)
             request.Content = settings.AddContent();
         request.AddHeaders(settings);
-        var response = await Client.Get().SendAsync(request);
+        var response = await Client.Get().SendAsync(request, onlyHeaders ? HttpCompletionOption.ResponseHeadersRead : HttpCompletionOption.ResponseContentRead);
         return 
             response.StatusCode == HttpStatusCode.OK 
             || response.StatusCode == HttpStatusCode.NotModified
