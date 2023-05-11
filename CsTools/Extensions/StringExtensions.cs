@@ -28,7 +28,7 @@ public static class StringExtensions
     /// <returns></returns>
     public static string SubstringAfter(this string? str, string startStr)
     {
-        var posStart = str?.IndexOf(startStr) + 1 ?? -1;
+        var posStart = str?.IndexOf(startStr) + startStr.Length ?? -1;
         return posStart != -1 && posStart < str!.Length - 1
         ? str.Substring(posStart)
         : "";
