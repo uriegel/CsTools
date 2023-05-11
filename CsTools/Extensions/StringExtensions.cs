@@ -21,6 +21,20 @@ public static class StringExtensions
     }
 
     /// <summary>
+    /// Returns a substring after a found substring, not including the substring
+    /// </summary>
+    /// <param name="str"></param>
+    /// <param name="startStr"></param>
+    /// <returns></returns>
+    public static string SubstringAfter(this string? str, string startStr)
+    {
+        var posStart = str?.IndexOf(startStr) + 1 ?? -1;
+        return posStart != -1 && posStart < str!.Length - 1
+        ? str.Substring(posStart)
+        : "";
+    }
+
+    /// <summary>
     /// Returns a substring, until a char in the string is found, not including the found char
     /// </summary>
     /// <param name="str"></param>
@@ -29,6 +43,20 @@ public static class StringExtensions
     public static string SubstringUntil(this string? str, char endChar)
     {
         var posEnd = str?.IndexOf(endChar) ?? 0;
+        return posEnd > 0
+        ? str!.Substring(0, posEnd)
+        : str ?? "";
+    }
+
+    /// <summary>
+    /// Returns a substring, until a substring in the string is found, not including the found substring
+    /// </summary>
+    /// <param name="str"></param>
+    /// <param name="endStr"></param>
+    /// <returns></returns>
+    public static string SubstringUntil(this string? str, string endStr)
+    {
+        var posEnd = str?.IndexOf(endStr) ?? 0;
         return posEnd > 0
         ? str!.Substring(0, posEnd)
         : str ?? "";
@@ -45,6 +73,19 @@ public static class StringExtensions
         => str
                 ?.SubstringAfter(startChar)
                 ?.SubstringUntil(endChar)
+                ?? "";
+
+    /// <summary>
+    /// Combination of 'SubstringAfter' and 'SubstringUntil', returning a substring embedded between 'startStr and 'endStr'
+    /// </summary>
+    /// <param name="str"></param>
+    /// <param name="startStr"></param>
+    /// <param name="endStr"></param>
+    /// <returns></returns>
+    public static string StringBetween(this string? str, string startStr, string endStr)
+        => str
+                ?.SubstringAfter(startStr)
+                ?.SubstringUntil(endStr)
                 ?? "";
 
     /// <summary>
