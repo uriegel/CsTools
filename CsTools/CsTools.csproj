@@ -4,9 +4,9 @@
   <targetFramework>net6.0</targetFramework>
 	<ImplicitUsings>enable</ImplicitUsings>
 	<Nullable>enable</Nullable>
-	<Version>4.3.1</Version>
-	<FileVersion>4.3.1.0</FileVersion>
-	<AssemblyVersion>4.3.1.0</AssemblyVersion>
+	<Version>4.4.0</Version>
+	<FileVersion>4.4.0.0</FileVersion>
+	<AssemblyVersion>4.4.0.0</AssemblyVersion>
 	<Authors>Uwe Riegel</Authors>
 	<Company>Uwe Riegel</Company>		
 	<Description>Tools for C#, mostly functional extensions for .NET Objects</Description>
@@ -34,7 +34,7 @@
 </ItemGroup>
 
 <ItemGroup>
-  <PackageReference Include="LinqTools" Version="4.0.0" />
+  <PackageReference Include="LinqTools" Version="4.2.0" />
 </ItemGroup>
 
 </Project>

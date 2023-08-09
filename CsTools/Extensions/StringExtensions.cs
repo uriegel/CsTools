@@ -1,5 +1,6 @@
 using System.Globalization;
 using LinqTools;
+
 using static LinqTools.Core;
 
 namespace CsTools.Extensions;
@@ -124,6 +125,21 @@ public static class StringExtensions
     /// <exception cref="Exception"></exception>
     public static string? GetEnvironmentVariable(this string key)
         => ExceptionToNull(() => Environment.GetEnvironmentVariable(key) ?? throw new Exception());
+
+    public static Option<string> GetEnvironmentVariableOption(this string key)
+    {
+        try
+        {
+            var val = Environment.GetEnvironmentVariable(key);
+            return val != null 
+                ? val
+                : None;
+        }
+        catch
+        {
+            return None;
+        }
+    }
 
     /// <summary>
     /// Ensures, that the given directory path exists, otherwise it creates the directory
