@@ -39,7 +39,7 @@ public static class Request
         => msg
             .Content
             .ReadAsStream()
-            .WithLength(msg.Content.Headers.ContentLength.GetOrDefault(0));
+            .WithLength(msg.Content.Headers.ContentLength ?? 0);
 
     public static Option<string> GetHeaderValue(this HttpResponseMessage msg, string name)
         => msg.Headers.TryGetValues(name, out var res)
@@ -52,13 +52,12 @@ public static class Request
         =>  from headerValue in msg.GetHeaderValue(name)
             from res in headerValue
                         .ParseLong()
-                        .FromNullableStruct()
             select res;
 
     static HttpRequestMessage CreateRequest(Settings settings)
         => new HttpRequestMessage(
             settings.Method,
-            settings.BaseUrl.GetOrDefault("") + settings.Url)
+            (settings.BaseUrl ?? "") + settings.Url)
         {
             Version = new(settings.Version.Major, settings.Version.Minor)
         };

@@ -90,25 +90,25 @@ public static class StringExtensions
                 ?? "";
 
     /// <summary>
-    /// Parses a string to get an int value, returning null if parsing not possible
+    /// Parses a string to get an int value, returning None if parsing is not possible
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    public static int? ParseInt(this string? str)
+    public static Option<int> ParseInt(this string? str)
         => int.TryParse(str, out var val)
             ? val
-            : null;
+            : None;
 
     /// <summary>
-    /// Parses a string to get a long value, returning null if parsing not possible
+    /// Parses a string to get a long value, returning None if parsing is not possible
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    public static long? ParseLong(this string? str)
+    public static Option<long> ParseLong(this string? str)
         => long.TryParse(str, out var val)
             ? val
-            : null;
-
+            : None;
+    
     /// <summary>
     /// Functional way of calling String.IsNullOrWhiteSpace
     /// </summary>
@@ -122,11 +122,7 @@ public static class StringExtensions
     /// </summary>
     /// <param name="key"></param>
     /// <returns></returns>
-    /// <exception cref="Exception"></exception>
-    public static string? GetEnvironmentVariable(this string key)
-        => ExceptionToNull(() => Environment.GetEnvironmentVariable(key) ?? throw new Exception());
-
-    public static Option<string> GetEnvironmentVariableOption(this string key)
+    public static Option<string> GetEnvironmentVariable(this string key)
     {
         try
         {

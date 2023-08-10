@@ -1,7 +1,6 @@
 using System.Collections.Immutable;
 using CsTools.Extensions;
 using LinqTools;
-using LinqTools.Nullable;
 
 using static LinqTools.Core;
 
@@ -39,24 +38,6 @@ public static class Memoization
 		};
 	}
 
-    public static Func<string, TResult?> Memoize<TResult>(Func<string, TResult> functionToMemoize,
-		bool caseInsensitive, Resetter? resetter = null, Func<string[]>? getIDs = null)
-        where TResult : class
-    => Memoize(caseInsensitive
-            ? ImmutableDictionary<string, RefCell<(TResult value, bool valid)>>.Empty.WithComparers(StringComparer.InvariantCultureIgnoreCase)
-            : ImmutableDictionary<string, RefCell<(TResult value, bool valid)>>.Empty,
-        (a, b) => string.Compare(a, b, caseInsensitive) == 0,
-        (k, ov) => functionToMemoize(k), resetter, getIDs);
-
-    public static Func<string, TResult?> Memoize<TResult>(Func<string, TResult?, TResult> functionToMemoize,
-		bool caseInsensitive, Resetter? resetter = null, Func<string[]>? getIDs = null)
-        where TResult : class
-    => Memoize(caseInsensitive
-            ? ImmutableDictionary<string, RefCell<(TResult value, bool valid)>>.Empty.WithComparers(StringComparer.InvariantCultureIgnoreCase)
-            : ImmutableDictionary<string, RefCell<(TResult value, bool valid)>>.Empty,
-        (a, b) => string.Compare(a, b, caseInsensitive) == 0,
-        functionToMemoize, resetter, getIDs);
-
     public static Func<Task<T>> MemoizeAsync<T>(Func<Task<T>> functionToMemoize, Resetter? resetter = null) 
 		where T : notnull
         => MemoizeAsync((T? oldValue) => functionToMemoize(), resetter)!;
@@ -92,22 +73,6 @@ public static class Memoization
             }
         };
     }
-
-	public static Func<TKey, Task<TResult?>> MemoizeAsync<TKey, TResult>(Func<TKey, TResult?, Task<TResult>> functionToMemoize, 
-		Resetter? resetter = null, Func<Task<TKey[]>>? getIDsAsync = null) 
-			where TKey : notnull
-			where TResult : class
-		=> MemoizeAsync(ImmutableDictionary<TKey, RefCell<(TResult value, bool valid)>>.Empty, 
-			(a, b) => a.Equals(b), functionToMemoize, resetter, getIDsAsync);
-
-	public static Func<string, Task<TResult?>> MemoizeAsync<TResult>(Func<string, TResult?, Task<TResult>> functionToMemoize,
-		bool caseInsensitive, Resetter? resetter = null, Func<Task<string[]>>? getIDsAsync = null)
-			where TResult : class
-		=> MemoizeAsync(caseInsensitive
-            ? ImmutableDictionary<string, RefCell<(TResult value, bool valid)>>.Empty.WithComparers(StringComparer.InvariantCultureIgnoreCase)
-            : ImmutableDictionary<string, RefCell<(TResult value, bool valid)>>.Empty, 
-			(a, b) => string.Compare(a, b, caseInsensitive) == 0,
-			functionToMemoize, resetter, getIDsAsync);
 
 	public static Func<string, Option<TResult>> Memoize<TResult>(Func<string, Option<TResult>, Option<TResult>> functionToMemoize,
 		bool caseInsensitive, Option<Resetter> resetter = default, Option<Func<string[]>> getIDs = default)
@@ -319,10 +284,10 @@ public static class Memoization
 
     public class Resetter
 	{
-		public Resetter() => action = null;
-		public Resetter(Action action) => this.action = action;
-		public void Reset() => action.ForEach(n => n());
+        public Resetter() { }
+        public Resetter(Action action) => this.action = action;
+		public void Reset() => action.WhenSome(n => n());
 		public void SetResetAction(Action action) => this.action = action;
-		Action? action;
+		Option<Action> action;
 	}
 }
