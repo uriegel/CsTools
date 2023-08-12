@@ -175,6 +175,15 @@ public static class StringExtensions
         => File.OpenRead(path);
 
     /// <summary>
+    /// Reads all Text from a text file
+    /// </summary>
+    /// <param name="path">Full path to the text file</param>
+    /// <returns>Containing text</returns>
+    public static string ReadAllTextFromFilePath(this string path)
+        => new StreamReader(File.OpenRead(path))
+            .Use(f => f.ReadToEnd());
+
+    /// <summary>
     /// Converting a DateTime string to a DateTime value if possible, otherwise returns null
     /// </summary>
     /// <param name="dateTimeStr"></param>
