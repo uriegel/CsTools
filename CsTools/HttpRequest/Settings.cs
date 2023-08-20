@@ -16,5 +16,6 @@ public record Settings(
     string Url,
     Version Version,
     Header[]? Headers,
-    Func<HttpContent>? AddContent
+    Func<HttpContent>? AddContent,
+    int? Timeout = null
 );

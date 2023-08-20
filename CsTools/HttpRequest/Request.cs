@@ -79,7 +79,9 @@ public static class Request
         if (settings.AddContent != null)
             request.Content = settings.AddContent();
         request.AddHeaders(settings);
-        var response = await Client.Get().SendAsync(request, onlyHeaders ? HttpCompletionOption.ResponseHeadersRead : HttpCompletionOption.ResponseContentRead);
+        var response = settings.Timeout.HasValue
+            ? await Client.Get().SendAsync(request, onlyHeaders ? HttpCompletionOption.ResponseHeadersRead : HttpCompletionOption.ResponseContentRead, new CancellationTokenSource(settings.Timeout.Value).Token)
+            : await Client.Get().SendAsync(request, onlyHeaders ? HttpCompletionOption.ResponseHeadersRead : HttpCompletionOption.ResponseContentRead);
         return 
             response.StatusCode == HttpStatusCode.OK 
             || response.StatusCode == HttpStatusCode.NotModified

@@ -4,18 +4,25 @@ namespace CsTools.HttpRequest;
 
 public static class Client
 {
-    public static void Init(int maxConnections)
-        => Client.maxConnections = maxConnections;
+    public static void Init(int maxConnections, TimeSpan? timeout)
+    {
+        Client.maxConnections = maxConnections;
+        Client.timeout = timeout;
+    }
 
     public static Func<HttpClient> Get { get; } = Memoize(Init);
 
     static HttpClient Init()
         => new HttpClient(new HttpClientHandler()
         {
-            MaxConnectionsPerServer = maxConnections
-        });
+            MaxConnectionsPerServer = maxConnections,
+        })
+        {
+            Timeout = timeout.HasValue ? timeout.Value : TimeSpan.FromSeconds(100)
+        };
 
     static int maxConnections = 8;
+    static TimeSpan? timeout;
 }
 
 public static partial class Core
