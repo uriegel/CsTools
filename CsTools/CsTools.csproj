@@ -4,9 +4,9 @@
   <targetFramework>net6.0</targetFramework>
 	<ImplicitUsings>enable</ImplicitUsings>
 	<Nullable>enable</Nullable>
-	<Version>2.1.0</Version>
-	<FileVersion>2.1.0.0</FileVersion>
-	<AssemblyVersion>2.1.0.0</AssemblyVersion>
+	<Version>5.4.0</Version>
+	<FileVersion>5.4.0.0</FileVersion>
+	<AssemblyVersion>5.4.0.0</AssemblyVersion>
 	<Authors>Uwe Riegel</Authors>
 	<Company>Uwe Riegel</Company>		
 	<Description>Tools for C#, mostly functional extensions for .NET Objects</Description>
@@ -15,6 +15,7 @@
 	<PackageProjectUrl>https://github.com/uriegel/CsTools</PackageProjectUrl>
 	<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 	<PackageLicenseFile>LICENSE</PackageLicenseFile>
+	<PackageReleaseNotes>Instead of Nullables use Option</PackageReleaseNotes>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>		    
 	<LangVersion>10</LangVersion>
@@ -34,7 +35,7 @@
 </ItemGroup>
 
 <ItemGroup>
-  <PackageReference Include="LinqTools" Version="1.1.0" />
+  <PackageReference Include="LinqTools" Version="5.2.0" />
 </ItemGroup>
 
 </Project>

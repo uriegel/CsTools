@@ -1,35 +1,34 @@
-using LinqTools;
 using CsTools.Extensions;
-
-using static LinqTools.Core;
-using static CsTools.Core;
+using LinqTools;
 
 namespace CsTools;
 
 public static class ProcessCmd
 {
 
-    public static Task<Result<string, ProcessCmdException>> RunAsync(string fileName, string args)
-        => Try(async () =>
+    public static Task<string> RunAsync(string fileName, string args)
+        => RawRunAsync(fileName, args)
+            .MapException(e => new ProcessCmdException(e));
+
+
+    static async Task<string> RawRunAsync(string fileName, string args)
+    {
+        var proc = await new System.Diagnostics.Process
+        {
+            StartInfo = new System.Diagnostics.ProcessStartInfo
             {
-                var proc = await new System.Diagnostics.Process
-                {
-                    StartInfo = new System.Diagnostics.ProcessStartInfo
-                    {
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true,
-                        FileName = fileName,
-                        Arguments = args,
-                        CreateNoWindow = true
-                    }
-                }
-                    .SideEffect(p => p.Start())
-                    .SideEffect(p => p.WaitForExitAsync());
-                var responseString =
-                    from n in await proc.StandardOutput.ReadToEndAsync()
-                    select n.WhiteSpaceToNull();
-                return responseString
-                    ?? Error<string, ProcessCmdException>(new ProcessCmdException((await proc.StandardError.ReadToEndAsync()).WhiteSpaceToNull(), proc.ExitCode));
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                FileName = fileName,
+                Arguments = args,
+                CreateNoWindow = true
             }
-        , e => Error<string, ProcessCmdException>(new ProcessCmdException(e)));
+        }
+            .SideEffect(p => p.Start())
+            .SideEffect(p => p.WaitForExitAsync());
+        
+        return 
+            (await proc.StandardOutput.ReadToEndAsync()).WhiteSpaceToNull()
+            ?? throw new ProcessCmdException((await proc.StandardError.ReadToEndAsync()).WhiteSpaceToNull(), proc.ExitCode);
+    }
 }
