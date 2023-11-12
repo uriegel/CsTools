@@ -155,8 +155,12 @@ public static class StringExtensions
     /// <param name="path"></param>
     /// <param name="subPath"></param>
     /// <returns></returns>
-    public static string AppendPath(this string path, string subPath)
-        => Path.Combine(path, subPath);
+    public static string AppendPath(this string? path, string? subPath)
+        => path != null
+                ? subPath != null
+                    ? Path.Combine(path, subPath)
+                    : path
+                : subPath ?? "";
 
     /// <summary>
     /// Creates a file from this path

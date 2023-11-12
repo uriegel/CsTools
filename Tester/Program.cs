@@ -4,7 +4,55 @@ using CsTools.HttpRequest;
 using static CsTools.ProcessCmd;
 using static CsTools.HttpRequest.Core;
 using System.Net.Http.Json;
-using LinqTools;
+
+using static CsTools.Functional.Tree;
+
+var test = new[] { "iexplore.exe", "de-DE", "en-US", "ieinstal.exe" }
+            .FlattenTree(Resolver, CreateFileItem, IsSubtree, null, AppendPath, @"C:\Program Files\Internet Explorer");
+
+bool IsSubtree(string path, string? subPath)
+    => (File.GetAttributes(subPath.AppendPath(path)) & FileAttributes.Directory) == FileAttributes.Directory;
+
+(IEnumerable<string>, string?) Resolver(string item, string? subPath)
+{
+    var path = subPath?.AppendPath(item) ?? item;
+    var dirItems = GetSafe(() => new DirectoryInfo(path).GetDirectories().Select(n => n.Name));
+    var fileItems = GetSafe(() => new DirectoryInfo(path).GetFiles().Select(n => n.Name));
+    var all = fileItems.Concat(dirItems);
+    return (all, item);
+}
+
+IEnumerable<string> GetSafe(Func<IEnumerable<string>> func)
+{
+    try 
+    {
+        return func();
+    }   
+    catch 
+    {
+        return Enumerable.Empty<string>();
+    }
+}
+
+string AppendPath(string? initialPath, string? subPath)
+    => initialPath.AppendPath(subPath);
+
+FileItem CreateFileItem(string path, string? subPath)
+{
+    var info = new FileInfo(subPath!.AppendPath(path));
+    return new(info.FullName, info.Length);
+}
+
+var test2 = new[] { @"C:\Users\urieg\Neu" }
+            .FlattenTree(Resolver, CreateFileItem, IsSubtree, null, AppendPath, (string?)null);
+
+var cts = new CancellationTokenSource(1200);
+var test3 = new[] { @"C:\windows\system32" }
+            .FlattenTree(Resolver, CreateFileItem, IsSubtree, cts.Token, AppendPath, (string?)null);
+
+
+var test4 = new[] { @"C:\windows\system32" }
+            .FlattenTree(Resolver, CreateFileItem, IsSubtree, null, AppendPath, (string?)null);
 
 using var stream = Resources.Get("text/README");
 using var file = File.Create("./test.md");
@@ -37,3 +85,5 @@ await msg
     .CopyToAsync(targetFile);
 
 Console.ReadLine();
+
+record FileItem(string Path, long Size);
