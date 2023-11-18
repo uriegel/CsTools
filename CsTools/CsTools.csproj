@@ -4,9 +4,9 @@
   <targetFramework>net6.0</targetFramework>
 	<ImplicitUsings>enable</ImplicitUsings>
 	<Nullable>enable</Nullable>
-	<Version>5.8.0</Version>
-	<FileVersion>5.8.0.0</FileVersion>
-	<AssemblyVersion>5.8.0.0</AssemblyVersion>
+	<Version>5.9.0</Version>
+	<FileVersion>5.9.0.0</FileVersion>
+	<AssemblyVersion>5.9.0.0</AssemblyVersion>
 	<Authors>Uwe Riegel</Authors>
 	<Company>Uwe Riegel</Company>		
 	<Description>Tools for C#, mostly functional extensions for .NET Objects</Description>
@@ -15,7 +15,7 @@
 	<PackageProjectUrl>https://github.com/uriegel/CsTools</PackageProjectUrl>
 	<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 	<PackageLicenseFile>LICENSE</PackageLicenseFile>
-	<PackageReleaseNotes>Flatten trees</PackageReleaseNotes>
+	<PackageReleaseNotes>Serialization extensions, WriteAllText, EnsureDirectoryExists</PackageReleaseNotes>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>		    
 	<LangVersion>10</LangVersion>

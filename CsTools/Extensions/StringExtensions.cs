@@ -179,13 +179,25 @@ public static class StringExtensions
         => File.OpenRead(path);
 
     /// <summary>
-    /// Reads all Text from a text file
+    /// Reads all text from a text file (Utf8)
     /// </summary>
     /// <param name="path">Full path to the text file</param>
     /// <returns>Containing text</returns>
-    public static string ReadAllTextFromFilePath(this string path)
-        => new StreamReader(File.OpenRead(path))
-            .Use(f => f.ReadToEnd());
+    public static string? ReadAllTextFromFilePath1(this string path)
+        => File.Exists(path)
+            ? new StreamReader(File.OpenRead(path))
+                .Use(f => f.ReadToEnd())
+            : null;
+
+    /// <summary>
+    /// Writes all text from to a file (Utf8)
+    /// </summary>
+    /// <param name="path">Full path to the text file</param>
+    /// <param name="text">Text to write</param>
+    public static void WriteAllTextToFilePath(this string path, string text)
+        => File
+            .CreateText(path)
+            .Use(str => str.Write(text));
 
     /// <summary>
     /// Converting a DateTime string to a DateTime value if possible, otherwise returns null
