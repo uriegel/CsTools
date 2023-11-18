@@ -183,7 +183,7 @@ public static class StringExtensions
     /// </summary>
     /// <param name="path">Full path to the text file</param>
     /// <returns>Containing text</returns>
-    public static string? ReadAllTextFromFilePath1(this string path)
+    public static string? ReadAllTextFromFilePath(this string path)
         => File.Exists(path)
             ? new StreamReader(File.OpenRead(path))
                 .Use(f => f.ReadToEnd())
