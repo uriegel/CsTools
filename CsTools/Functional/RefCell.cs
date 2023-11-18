@@ -1,6 +1,6 @@
 namespace CsTools.Functional;
 
-class RefCell<T>
+public class RefCell<T>
 {
     public T? Value;
 
