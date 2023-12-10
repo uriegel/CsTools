@@ -6,6 +6,19 @@ using static CsTools.HttpRequest.Core;
 using System.Net.Http.Json;
 
 using static CsTools.Functional.Tree;
+using LinqTools;
+
+int Divide(int a, int d)
+    => a / d;
+
+async Task<int> MakeAsync(Func<int> syncFunc)
+    => syncFunc();
+
+var testOk = await MakeAsync(() => Divide(16, 4))
+                    .Catch(e => 0.SideEffect(_ => Console.WriteLine($"catched: {e}")));    
+
+var testE = await MakeAsync(() => Divide(16, 0))
+                    .Catch(e => 0.SideEffect(_ => Console.WriteLine($"catched: {e}")));    
 
 var test = new[] { "iexplore.exe", "de-DE", "en-US", "ieinstal.exe" }
             .FlattenTree(Resolver, CreateFileItem, IsSubtree, null, AppendPath, @"C:\Program Files\Internet Explorer");
