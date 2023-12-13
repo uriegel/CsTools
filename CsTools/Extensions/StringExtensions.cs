@@ -150,6 +150,41 @@ public static class StringExtensions
             });        
 
     /// <summary>
+    /// Checks if the given directory path exists, otherwise it creates the directory
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public static Result<string, DirectoryError> TryEnsureDirectoryExists(this string path)
+    {
+        try
+        {
+            if (!System.IO.Directory.Exists(path))
+                System.IO.Directory.CreateDirectory(path);
+            return path;
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Error<string, DirectoryError>(DirectoryError.AccessDenied);
+        }
+        catch (DirectoryNotFoundException)
+        {
+            return Error<string, DirectoryError>(DirectoryError.DirectoryNotFound);
+        }
+        catch (PathTooLongException)
+        {
+            return Error<string, DirectoryError>(DirectoryError.PathTooLong);
+        }
+        catch (NotSupportedException)
+        {
+            return Error<string, DirectoryError>(DirectoryError.NotSupported);
+        }
+        catch 
+        {
+            return Error<string, DirectoryError>(DirectoryError.Unknown);
+        }
+    }        
+
+    /// <summary>
     /// Appends the given subpath to this path
     /// </summary>
     /// <param name="path"></param>

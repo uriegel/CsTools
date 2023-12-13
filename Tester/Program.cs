@@ -11,6 +11,9 @@ using LinqTools;
 int Divide(int a, int d)
     => a / d;
 
+var home = CsTools.Directory.GetHomeDir();
+var docs = CsTools.Directory.GetDocumentsDir();
+
 async Task<int> MakeAsync(Func<int> syncFunc)
     => syncFunc();
 
