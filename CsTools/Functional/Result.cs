@@ -20,8 +20,6 @@ namespace CsTools.Functional
             Ok = value;
             Error = default;
         }
-        // TODO AsyncResult 
-        // TODO Serialize Result with IsOk == true as default! perhaps isError instead?
 
         internal Result(TE value)
         {
@@ -114,6 +112,12 @@ namespace CsTools.Functional
             else
                 return await failFunc(awaitedsResult.Error!);
         }
+
+        internal static async Task<Result<TResult, TE>> InternalSelectAwait<TResult>(Result<T, TE> source, Func<T, Task<TResult>> selector)
+            where TResult : notnull
+            => source.IsError == false
+                ? Ok<TResult, TE>(await selector(source.Ok!))
+                : Error<TResult, TE>(source.Error!);
 
         [JsonInclude]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
@@ -457,6 +461,12 @@ namespace CsTools.Functional
             where T : notnull
             where TE : notnull
             => Task.FromResult(result);
+
+        internal static Task<Result<TResult, TE>> InternalSelectAwait<TResult, T, TE>(this Result<T, TE> source, Func<T, Task<TResult>> selector)
+            where T : notnull
+            where TE : notnull
+            where TResult : notnull
+            => Result<T, TE>.InternalSelectAwait(source, selector);
     }
 }
 

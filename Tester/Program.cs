@@ -13,6 +13,27 @@ int Divide(int a, int d)
 var home = CsTools.Directory.GetHomeDir();
 var docs = CsTools.Directory.GetDocumentsDir();
 
+var dict = new Dictionary<string, int>
+    {
+        { "111", 1 },
+        { "112", 1234 },
+        { "113", 4321 }
+    };
+
+var val = dict.TryGetValue("112");
+var val2 = dict.TryGetValue("115");
+
+var dict2 = new Dictionary<int, string>
+    {
+        { 111, "1" },
+        { 112, "1234" },
+        { 113, "4321" }
+    };
+
+var val3= dict2.GetValue(112);
+var val4 = dict2.GetValue(115);
+
+#pragma warning disable 1998
 async Task<int> MakeAsync(Func<int> syncFunc)
     => syncFunc();
 
