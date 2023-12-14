@@ -1,5 +1,4 @@
-using LinqTools;
-
+using CsTools.Extensions;
 using static CsTools.Functional.Memoization;
 
 namespace CsTools;

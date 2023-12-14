@@ -13,12 +13,12 @@ public static class Client
     public static Func<HttpClient> Get { get; } = Memoize(Init);
 
     static HttpClient Init()
-        => new HttpClient(new HttpClientHandler()
+        => new (new HttpClientHandler()
         {
             MaxConnectionsPerServer = maxConnections,
         })
         {
-            Timeout = timeout.HasValue ? timeout.Value : TimeSpan.FromSeconds(100)
+            Timeout = timeout ?? TimeSpan.FromSeconds(100)
         };
 
     static int maxConnections = 8;

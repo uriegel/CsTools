@@ -1,7 +1,7 @@
 using System.Globalization;
-using LinqTools;
+using CsTools.Functional;
 
-using static LinqTools.Core;
+using static CsTools.Core;
 
 namespace CsTools.Extensions;
 
@@ -94,20 +94,20 @@ public static class StringExtensions
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    public static Option<int> ParseInt(this string? str)
+    public static int? ParseInt(this string str)
         => int.TryParse(str, out var val)
             ? val
-            : None;
+            : null;
 
     /// <summary>
     /// Parses a string to get a long value, returning None if parsing is not possible
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    public static Option<long> ParseLong(this string? str)
+    public static long? ParseLong(this string str)
         => long.TryParse(str, out var val)
             ? val
-            : None;
+            : null;
     
     /// <summary>
     /// Functional way of calling String.IsNullOrWhiteSpace
@@ -122,18 +122,15 @@ public static class StringExtensions
     /// </summary>
     /// <param name="key"></param>
     /// <returns></returns>
-    public static Option<string> GetEnvironmentVariable(this string key)
+    public static string? GetEnvironmentVariable(this string key)
     {
         try
         {
-            var val = Environment.GetEnvironmentVariable(key);
-            return val != null 
-                ? val
-                : None;
+            return Environment.GetEnvironmentVariable(key);
         }
         catch
         {
-            return None;
+            return null;
         }
     }
 
@@ -240,7 +237,7 @@ public static class StringExtensions
     /// <param name="dateTimeStr"></param>
     /// <param name="format"></param>
     /// <returns></returns>
-    public static DateTime? ToDateTime(this string? dateTimeStr, string format)
+    public static DateTime? ToDateTime(this string dateTimeStr, string format)
         => ToDateTime(dateTimeStr, format, CultureInfo.InvariantCulture);
 
     /// <summary>
@@ -250,7 +247,7 @@ public static class StringExtensions
     /// <param name="format"></param>
     /// <param name="culture"></param>
     /// <returns></returns>
-    public static  DateTime? ToDateTime(this string? dateTimeStr, string format, CultureInfo culture)
+    public static  DateTime? ToDateTime(this string dateTimeStr, string format, CultureInfo culture)
         => DateTime.TryParseExact(dateTimeStr?.TrimEnd('\0') ?? "", format, 
                 culture, DateTimeStyles.None, out var dt)
             ? dt

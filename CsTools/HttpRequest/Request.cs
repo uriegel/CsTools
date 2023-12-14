@@ -1,10 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
 using CsTools.Extensions;
-using LinqTools;
-using LinqTools.Async;
-
-using static LinqTools.Core;
+using CsTools.Async;
 
 namespace CsTools.HttpRequest;
 
@@ -41,23 +38,18 @@ public static class Request
             .ReadAsStream()
             .WithLength(msg.Content.Headers.ContentLength ?? 0);
 
-    public static Option<string> GetHeaderValue(this HttpResponseMessage msg, string name)
+    public static string? GetHeaderValue(this HttpResponseMessage msg, string name)
         => msg.Headers.TryGetValues(name, out var res)
         ? res.First()
         : msg.Content.Headers.TryGetValues(name, out var contentRes)
             ? contentRes.First()
-            : None;
+            : null;
 
-    public static Option<long> GetHeaderLongValue(this HttpResponseMessage msg, string name)
-        =>  from headerValue in msg.GetHeaderValue(name)
-            from res in headerValue
-                        .ParseLong()
-            select res;
+    public static long? GetHeaderLongValue(this HttpResponseMessage msg, string name)
+        => msg.GetHeaderValue(name)?.ParseLong();
 
     static HttpRequestMessage CreateRequest(Settings settings)
-        => new HttpRequestMessage(
-            settings.Method,
-            (settings.BaseUrl ?? "") + settings.Url)
+        => new(settings.Method, (settings.BaseUrl ?? "") + settings.Url)
         {
             Version = new(settings.Version.Major, settings.Version.Minor)
         };

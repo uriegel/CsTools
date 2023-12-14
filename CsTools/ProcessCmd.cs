@@ -1,5 +1,4 @@
 using CsTools.Extensions;
-using LinqTools;
 
 namespace CsTools;
 

@@ -1,4 +1,4 @@
-namespace CsTools;
+namespace CsTools.Extensions;
 
 public static class TaskExtensions
 {

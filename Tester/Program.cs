@@ -6,7 +6,6 @@ using static CsTools.HttpRequest.Core;
 using System.Net.Http.Json;
 
 using static CsTools.Functional.Tree;
-using LinqTools;
 
 int Divide(int a, int d)
     => a / d;
