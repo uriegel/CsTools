@@ -1,4 +1,4 @@
-namespace LinqTools.Functional;
+namespace CsTools.Functional;
 
 public static class Conditional
 {
