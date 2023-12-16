@@ -91,7 +91,7 @@ public readonly struct AsyncResult<T, TE>
 
 public static class AsyncResultExtensions
 {
-    public static AsyncResult<T, TE> ToAsyncOption<T, TE>(this Result<T, TE> result)
+    public static AsyncResult<T, TE> ToAsyncResult<T, TE>(this Result<T, TE> result)
         where T : notnull
         where TE : notnull
         => new(result);
