@@ -450,18 +450,6 @@ namespace CsTools.Functional
             where TE : notnull
             => result.Match(val => val, getExceptionValue);
 
-        /// <summary>
-        /// Elevates a Result to a Task&lt;Result&gt; monad
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="TE"></typeparam>
-        /// <param name="result"></param>
-        /// <returns></returns>
-        public static Task<Result<T, TE>> ToAsyncResult<T, TE>(this Result<T, TE> result)
-            where T : notnull
-            where TE : notnull
-            => Task.FromResult(result);
-
         internal static Task<Result<TResult, TE>> InternalSelectAwait<TResult, T, TE>(this Result<T, TE> source, Func<T, Task<TResult>> selector)
             where T : notnull
             where TE : notnull
