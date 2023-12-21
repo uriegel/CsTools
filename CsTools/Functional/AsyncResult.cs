@@ -107,10 +107,18 @@ public static class AsyncResultExtensions
         where TSource : notnull
         where TE : notnull
         where TResult : notnull
-    
     => new((from n in source.resultTask
             select n.InternalSelectAwait(selector)).Unwrap());
+
+    public static AsyncResult<T, TE> BindExceptionAwait<T, TE>(this AsyncResult<T, TE> source, Func<TE, AsyncResult<T, TE>> selector)
+        where T : notnull
+        where TE : notnull
+    
+        => new(from n in source.resultTask
+                from m in Result<T, TE>.InternalBindExceptionAwait(n, e => selector(e).ToResult())
+                select m);
 }
+
 //     // public static Option<R> Map<T, R>(this Option<T> opt, Func<T, R> func)
 //     //     where R : notnull
 //     //     where T : notnull

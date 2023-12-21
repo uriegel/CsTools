@@ -113,6 +113,11 @@ namespace CsTools.Functional
                 return await failFunc(awaitedsResult.Error!);
         }
 
+        internal static async Task<Result<T, TE>> InternalBindExceptionAwait(Result<T, TE> source, Func<TE, Task<Result<T, TE>>> selector)
+            => source.IsError == false
+                ? Ok<T, TE>(source.Ok!)
+                : await selector(source.Error!);
+
         internal static async Task<Result<TResult, TE>> InternalSelectAwait<TResult>(Result<T, TE> source, Func<T, Task<TResult>> selector)
             where TResult : notnull
             => source.IsError == false
@@ -386,6 +391,23 @@ namespace CsTools.Functional
                     e => new Result<TResult, TE>(e)
                 ),
                 e => new Result<TResult, TE>(e)
+            );
+
+        /// <summary>
+        /// Transforms the Error value (if present) to Result.
+        /// </summary>
+        /// <typeparam name="T">Source type</typeparam>
+        /// <typeparam name="TE">Exception type</typeparam>
+        /// <param name="result"></param>
+        /// <param name="errorSelector"></param>
+        /// <returns></returns>
+        public static Result<T, TE> BindException<T, TE>(this Result<T, TE> result,
+                Func<TE, Result<T, TE>> errorSelector)
+            where T : notnull
+            where TE : notnull
+            => result.Match(
+                t => t,
+                e => errorSelector(e)
             );
 
         /// <summary>
