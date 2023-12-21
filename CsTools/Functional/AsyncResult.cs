@@ -1,3 +1,4 @@
+using System.Reflection.PortableExecutable;
 using CsTools.Async;
 using CsTools.Extensions;
 
@@ -113,10 +114,15 @@ public static class AsyncResultExtensions
     public static AsyncResult<T, TE> BindExceptionAwait<T, TE>(this AsyncResult<T, TE> source, Func<TE, AsyncResult<T, TE>> selector)
         where T : notnull
         where TE : notnull
-    
-        => new(from n in source.resultTask
-                from m in Result<T, TE>.InternalBindExceptionAwait(n, e => selector(e).ToResult())
-                select m);
+
+    {
+        async Task<Result<T, TE>> Bind()
+        {
+            var r = await source.resultTask;
+            return await Result<T, TE>.InternalBindExceptionAwait(r, e => selector(e).ToResult());
+        }
+        return new(Bind());
+    }
 }
 
 //     // public static Option<R> Map<T, R>(this Option<T> opt, Func<T, R> func)
