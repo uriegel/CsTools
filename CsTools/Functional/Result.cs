@@ -113,7 +113,24 @@ namespace CsTools.Functional
                 return await failFunc(awaitedsResult.Error!);
         }
 
-        internal static async Task<Result<T, TE>> InternalBindExceptionAwait(Result<T, TE> source, Func<TE, Task<Result<T, TE>>> selector)
+        internal static Result<TR, TE> InternalBind<TR>(Result<T, TE> source, Func<T, Result<TR, TE>> selector)
+            where TR: notnull
+            => source.IsError == false
+                ? selector(source.Ok!)
+                : Error<TR, TE>(source.Error!);
+
+        internal static Result<T, TE> InternalBindError(Result<T, TE> source, Func<TE, Result<T, TE>> selector)
+            => source.IsError == false
+                ? Ok<T, TE>(source.Ok!)
+                : selector(source.Error!);
+
+        internal static async Task<Result<TR, TE>> InternalBindAwait<TR>(Result<T, TE> source, Func<T, Task<Result<TR, TE>>> selector)
+            where TR: notnull
+            => source.IsError == false
+                ? await selector(source.Ok!)
+                : Error<TR, TE>(source.Error!);
+
+        internal static async Task<Result<T, TE>> InternalBindErrorAwait(Result<T, TE> source, Func<TE, Task<Result<T, TE>>> selector)
             => source.IsError == false
                 ? Ok<T, TE>(source.Ok!)
                 : await selector(source.Error!);
