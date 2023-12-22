@@ -8,6 +8,7 @@ public class JsonRequest(string baseUrl)
 {
     public AsyncResult<TR, RequestError> Post<T, TR>(RequestType<T> request)
         where TR : notnull
+        // TODO test with AspNetExtensions tester (WriteLine start AspNetExtensions tester)
         // TODO client exceptions + 1000
         // TODO no connection
         // TODO exn
