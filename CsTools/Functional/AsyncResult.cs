@@ -97,6 +97,11 @@ public static class AsyncResultExtensions
         where TE : notnull
         => new(result);
 
+    public static AsyncResult<T, TE> ToAsyncResult<T, TE>(this Task<Result<T, TE>> result)
+        where T : notnull
+        where TE : notnull
+        => new(result);
+
     public static AsyncResult<TResult, TE> Select<TSource, TE, TResult>(this AsyncResult<TSource, TE> source, Func<TSource, TResult> func)
         where TSource : notnull
         where TE : notnull
