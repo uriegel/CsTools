@@ -10,10 +10,12 @@ public class JsonRequest(string baseUrl)
         where TR : notnull
         // TODO test with AspNetExtensions tester (WriteLine start AspNetExtensions tester)
         // TODO client exceptions + 1000
-        // TODO no connection
-        // TODO exn
-        // TODO wrong method (not found)
-        // TODO json parse error (wrong target type)
+        // TODO no connection 1001
+        // TODO unknown host 1002
+        // TODO json parse error (wrong target type) 1003
+        // TODO exn 1010
+        // TODO wrong method (not found) 
+        
         => PostAsync<T, TR>(request)
             .ToAsyncResult();
 
