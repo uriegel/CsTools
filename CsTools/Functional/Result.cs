@@ -414,11 +414,11 @@ namespace CsTools.Functional
         /// Transforms the Error value (if present) to Result.
         /// </summary>
         /// <typeparam name="T">Source type</typeparam>
-        /// <typeparam name="TE">Exception type</typeparam>
+        /// <typeparam name="TE">Error type</typeparam>
         /// <param name="result"></param>
         /// <param name="errorSelector"></param>
         /// <returns></returns>
-        public static Result<T, TE> BindException<T, TE>(this Result<T, TE> result,
+        public static Result<T, TE> BindError<T, TE>(this Result<T, TE> result,
                 Func<TE, Result<T, TE>> errorSelector)
             where T : notnull
             where TE : notnull
@@ -428,7 +428,7 @@ namespace CsTools.Functional
             );
 
         /// <summary>
-        /// Transforms the Exception type to another rype
+        /// Transforms the Error type to another rype
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="TE"></typeparam>
@@ -436,7 +436,7 @@ namespace CsTools.Functional
         /// <param name="result"></param>
         /// <param name="selector"></param>
         /// <returns></returns>
-        public static Result<T, TER> SelectException<T, TE, TER>(this Result<T, TE> result, Func<TE, TER> selector)
+        public static Result<T, TER> SelectError<T, TE, TER>(this Result<T, TE> result, Func<TE, TER> selector)
             where T : notnull
             where TE : notnull
             where TER : notnull
@@ -446,7 +446,7 @@ namespace CsTools.Functional
             );
 
         /// <summary>
-        /// Transforms the Exception type to another rype
+        /// Transforms the SelectError type to another rype
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="TE"></typeparam>
@@ -454,7 +454,7 @@ namespace CsTools.Functional
         /// <param name="result"></param>
         /// <param name="selector"></param>
         /// <returns></returns>
-        public static Task<Result<T, TER>> SelectException<T, TE, TER>(this Task<Result<T, TE>> result, Func<TE, TER> selector)
+        public static Task<Result<T, TER>> SelectError<T, TE, TER>(this Task<Result<T, TE>> result, Func<TE, TER> selector)
             where T : notnull
             where TE : notnull
             where TER : notnull
@@ -482,12 +482,12 @@ namespace CsTools.Functional
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="TE"></typeparam>
         /// <param name="result"></param>
-        /// <param name="getExceptionValue">Function retrieving result from exception value</param>
+        /// <param name="getErrorValue">Function retrieving result from error value</param>
         /// <returns></returns>
-        public static T Get<T, TE>(this Result<T, TE> result, Func<TE, T> getExceptionValue)
+        public static T Get<T, TE>(this Result<T, TE> result, Func<TE, T> getErrorValue)
             where T : notnull
             where TE : notnull
-            => result.Match(val => val, getExceptionValue);
+            => result.Match(val => val, getErrorValue);
 
         internal static Task<Result<TResult, TE>> InternalSelectAwait<TResult, T, TE>(this Result<T, TE> source, Func<T, Task<TResult>> selector)
             where T : notnull
@@ -539,11 +539,11 @@ namespace CsTools
         {
             try
             {
-                return Core.Ok<T, TE>(func());
+                return Ok<T, TE>(func());
             }
             catch (Exception ex)
             {
-                return Core.Error<T, TE>(onException(ex));
+                return Error<T, TE>(onException(ex));
             }
         }
 
@@ -564,7 +564,7 @@ namespace CsTools
             }
             catch (Exception ex)
             {
-                return Core.Error<Nothing, TE>(onException(ex));
+                return Error<Nothing, TE>(onException(ex));
             }
         }
 
@@ -582,11 +582,11 @@ namespace CsTools
         {
             try
             {
-                return Core.Ok<T, TE>(await func());
+                return Ok<T, TE>(await func());
             }
             catch (Exception ex)
             {
-                return Core.Error<T, TE>(onException(ex));
+                return Error<T, TE>(onException(ex));
             }
         }
 
@@ -607,7 +607,7 @@ namespace CsTools
             }
             catch (Exception ex)
             {
-                return Core.Error<Nothing, TE>(onException(ex));
+                return Error<Nothing, TE>(onException(ex));
             }
         }
     }

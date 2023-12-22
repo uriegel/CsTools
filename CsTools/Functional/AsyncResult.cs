@@ -39,6 +39,13 @@ public static class AsyncResultExtensions
     => new(from n in source.resultTask
            select n.Select(func));
 
+    public static AsyncResult<T, TER> SelectError<T, TE, TER>(this AsyncResult<T, TE> source, Func<TE, TER> errorSelector)
+        where T : notnull
+        where TE : notnull
+        where TER : notnull
+    => new(from n in source.resultTask
+           select n.SelectError(errorSelector));
+
     public static AsyncResult<TResult, TE> SelectAwait<TSource, TE, TResult>(this AsyncResult<TSource, TE> source, Func<TSource, Task<TResult>> selector)
         where TSource : notnull
         where TE : notnull
