@@ -1,6 +1,8 @@
 using System.Net.Http.Json;
 using CsTools.Functional;
+
 using static CsTools.HttpRequest.Core;
+using static CsTools.Core;
 
 namespace CsTools.HttpRequest;
 
@@ -8,28 +10,42 @@ public class JsonRequest(string baseUrl)
 {
     public AsyncResult<TR, RequestError> Post<T, TR>(RequestType<T> request)
         where TR : notnull
-        // TODO test with AspNetExtensions tester (WriteLine start AspNetExtensions tester)
-        // TODO client exceptions + 1000
-        // TODO no connection 1001
-        // TODO unknown host 1002
-        // TODO json parse error (wrong target type) 1003
-        // TODO exn 1010
-        // TODO wrong method (not found) 
-        
         => PostAsync<T, TR>(request)
             .ToAsyncResult();
 
     async Task<Result<TR, RequestError>> PostAsync<T, TR>(RequestType<T> request)
         where TR: notnull
     {
-        using var msg = await Request.RunAsync(DefaultSettings with
+        try 
         {
-            Method = HttpMethod.Post,
-            BaseUrl = baseUrl,
-            Url = request.Method,
-            AddContent = () => JsonContent.Create(request.Payload)
-        }, true);
-        return await msg.Content.ReadFromJsonAsync<Result<TR, RequestError>>();
+            using var msg = await Request.RunAsync(DefaultSettings with
+            {
+                Method = HttpMethod.Post,
+                BaseUrl = baseUrl.EndsWith('/') ? baseUrl : baseUrl + "/",
+                Url = request.Method,
+                AddContent = () => JsonContent.Create(request.Payload)
+            }, true);
+            return await msg.Content.ReadFromJsonAsync<Result<TR, RequestError>>();
+        }
+        catch (HttpException he) when (he.InnerException is System.Net.Http.HttpRequestException hre 
+                && hre.HttpRequestError == HttpRequestError.ConnectionError)
+        {
+            return Error<TR, RequestError>(new(1001, hre.Message));
+        }
+        catch (HttpException he) when 
+            (he.InnerException is System.Net.Http.HttpRequestException hre 
+                && hre.HttpRequestError == HttpRequestError.NameResolutionError)
+        {
+            return Error<TR, RequestError>(new(1002, hre.Message));
+        }
+        catch (HttpException he) when (he.InnerException is HttpRequestException hre) 
+        {
+            return Error<TR, RequestError>(new((int)hre.Code + 1000, hre.Message));
+        }
+        catch (Exception e)
+        {
+            return Error<TR, RequestError>(new(1000, e.Message));
+        }
     }
 }
 

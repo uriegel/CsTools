@@ -1,11 +1,56 @@
 ﻿using CsTools;
 using CsTools.Extensions;
 using CsTools.HttpRequest;
-using static CsTools.ProcessCmd;
-using static CsTools.HttpRequest.Core;
 using System.Net.Http.Json;
 
+using static System.Console;
 using static CsTools.Functional.Tree;
+using static CsTools.ProcessCmd;
+using static CsTools.HttpRequest.Core;
+using CsTools.Functional;
+
+var jsonRequest = new JsonRequest("http://localhost:2000/requests");
+var res = await jsonRequest
+                .Post<Request2, ResultType>(new("req2", new("Uwe Riegel", 9865)))
+                .ToResult();
+ShowResult("Without connection", res);
+
+var jsonRequestU = new JsonRequest("http://unknownhost:2000/requests");
+res = await jsonRequestU
+                .Post<Request2, ResultType>(new("req2", new("Uwe Riegel", 9865)))
+                .ToResult();
+ShowResult("Unknown host", res);
+
+WriteLine("Please start program 'Tester' from 'https://github.com/uriegel/AspNetExtensions', then press 'enter'");
+ReadLine();
+
+res = await jsonRequest
+                .Post<Request2, ResultType>(new("req2", new("Uwe Riegel", 9865)))
+                .ToResult();
+ShowResult("With connection", res);
+
+res = await jsonRequest
+                .Post<RequestWrong, ResultType>(new("req2", new("Uwe Riegel", true)))
+                .ToResult();
+ShowResult("Wrong type", res);
+
+var res2 = await jsonRequest
+                .Post<Request2, WrongResultType>(new("req2", new("Uwe Riegel", 9865)))
+                .ToResult();
+ShowResult("Wrong target type", res);
+
+res = await jsonRequest
+                .Post<Request2, ResultType>(new("wrongreq", new("Uwe Riegel", 1234)))
+                .ToResult();
+ShowResult("Wrong request", res);
+
+void ShowResult<T>(string text, Result<T, RequestError> result)
+    where T: notnull
+    => res.Match(
+        ok => WriteLine($"Ok {text}: {ok}"),
+        err => WriteLine($"Error {text}: {err.Status} {err.StatusText}"));
+
+ReadLine();
 
 int Divide(int a, int d)
     => a / d;
@@ -120,6 +165,12 @@ await msg
     .ReadAsStream()
     .CopyToAsync(targetFile);
 
-Console.ReadLine();
+ReadLine();
 
 record FileItem(string Path, long Size);
+
+record Request2(string Name, int Id);
+record RequestWrong(string NoName, bool Id);
+record ResultType(string Result, int Id);
+record WrongResultType(string NoResult, DateTime Id);
+
