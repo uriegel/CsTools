@@ -9,6 +9,23 @@ using static CsTools.ProcessCmd;
 using static CsTools.HttpRequest.Core;
 using CsTools.Functional;
 
+using static CsTools.Core;
+
+var resOk = Ok<string, int>("Das ist das Gute");
+var resErr = Error<string, int>(9876);
+
+Result<ResultType, string> Transform(Result<string, int> input)
+    => input
+        .SelectError(err => $"Error occurred: {err}")
+        .Select(ok => new ResultType(ok, 999));
+
+Transform(resOk).Match(
+    ok => WriteLine($"Ok: {ok}"),
+    err => WriteLine($"Err: {err}"));
+Transform(resErr).Match(
+    ok => WriteLine($"Ok: {ok}"),
+    err => WriteLine($"Err: {err}"));
+
 var jsonRequest = new JsonRequest("http://localhost:2000/requests");
 var res = await jsonRequest
                 .Post<Request2, ResultType>(new("req2", new("Uwe Riegel", 9865)))
