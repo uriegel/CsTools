@@ -41,7 +41,8 @@ ShowResult("Unknown host", res);
 WriteLine("Please start program 'Tester' from 'https://github.com/uriegel/AspNetExtensions', then press 'enter'");
 ReadLine();
 
-new SseClient("http://localhost:2000/sse/test");
+var sse1 = new SseClient("http://localhost:2000/sse/test", WriteLine);
+var sse2 = new SseClient<Event>("http://localhost:2000/sse/test", msg => WriteLine(msg.Content));
 
 res = await jsonRequest
                 .Post<Request2, ResultType>(new("req2", new("Uwe Riegel", 9865)))
@@ -68,6 +69,11 @@ void ShowResult<T>(string text, Result<T, RequestError> result)
     => res.Match(
         ok => WriteLine($"Ok {text}: {ok}"),
         err => WriteLine($"Error {text}: {err.Status} {err.StatusText}"));
+
+ReadLine();
+
+sse1.Dispose();
+sse2.Dispose();
 
 ReadLine();
 
@@ -193,3 +199,4 @@ record RequestWrong(string NoName, bool Id);
 record ResultType(string Result, int Id);
 record WrongResultType(string NoResult, DateTime Id);
 
+record Event(string Content);
