@@ -41,6 +41,8 @@ ShowResult("Unknown host", res);
 WriteLine("Please start program 'Tester' from 'https://github.com/uriegel/AspNetExtensions', then press 'enter'");
 ReadLine();
 
+new SseClient("http://localhost:2000/sse/test");
+
 res = await jsonRequest
                 .Post<Request2, ResultType>(new("req2", new("Uwe Riegel", 9865)))
                 .ToResult();
