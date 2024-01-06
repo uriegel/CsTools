@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using CsTools.Extensions;
 using CsTools.Functional;
 
 using static CsTools.Core;
@@ -510,6 +511,26 @@ namespace CsTools.Functional
             );
 
         /// <summary>
+        /// Performs a sideeffect on the OK value (if present)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TE"></typeparam>
+        /// <param name="result"></param>
+        /// <param name="sideEffect">Function performing side effect on the OK value</param>
+        /// <returns></returns>
+        public static Task<Result<T, TE>> SideEffectWhenOkAsync<T, TE>(this Result<T, TE> result, Func<T, Task> sideEffect)
+            where T : notnull
+            where TE : notnull
+            => result.MatchAsync(
+                async ok =>
+                    {
+                        await sideEffect(ok);
+                        return result;
+                    },
+                e => result
+            );
+
+        /// <summary>
         /// Performs a sideeffect on the Error value (if present)
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -525,6 +546,26 @@ namespace CsTools.Functional
                 e =>                     
                     {
                         sideEffect(e);
+                        return result;
+                    }
+            );
+
+        /// <summary>
+        /// Performs a sideeffect on the Error value (if present)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TE"></typeparam>
+        /// <param name="result"></param>
+        /// <param name="sideEffect">Function performing side effect on the Error value</param>
+        /// <returns></returns>
+        public static Task<Result<T, TE>> SideEffectWhenErrorAsync<T, TE>(this Result<T, TE> result, Func<TE, Task> sideEffect)
+            where T : notnull
+            where TE : notnull
+            => result.MatchAsync(
+                ok => result.ToAsync(),
+                async e =>                     
+                    {
+                        await sideEffect(e);
                         return result;
                     }
             );
