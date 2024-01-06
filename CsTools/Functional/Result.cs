@@ -489,7 +489,47 @@ namespace CsTools.Functional
             where TE : notnull
             => result.Match(val => val, getErrorValue);
 
-        internal static Task<Result<TResult, TE>> InternalSelectAwait<TResult, T, TE>(this Result<T, TE> source, Func<T, Task<TResult>> selector)
+        /// <summary>
+        /// Performs a sideeffect on the OK value (if present)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TE"></typeparam>
+        /// <param name="result"></param>
+        /// <param name="sideEffect">Function performing side effect on the OK value</param>
+        /// <returns></returns>
+        public static Result<T, TE> SideEffectWhenOk<T, TE>(this Result<T, TE> result, Action<T> sideEffect)
+            where T : notnull
+            where TE : notnull
+            => result.Match(
+                ok =>
+                    {
+                        sideEffect(ok);
+                        return result;
+                    },
+                e => result
+            );
+
+        /// <summary>
+        /// Performs a sideeffect on the Error value (if present)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TE"></typeparam>
+        /// <param name="result"></param>
+        /// <param name="sideEffect">Function performing side effect on the Error value</param>
+        /// <returns></returns>
+        public static Result<T, TE> SideEffectWhenError<T, TE>(this Result<T, TE> result, Action<TE> sideEffect)
+            where T : notnull
+            where TE : notnull
+            => result.Match(
+                ok => result,
+                e =>                     
+                    {
+                        sideEffect(e);
+                        return result;
+                    }
+            );
+
+       internal static Task<Result<TResult, TE>> InternalSelectAwait<TResult, T, TE>(this Result<T, TE> source, Func<T, Task<TResult>> selector)
             where T : notnull
             where TE : notnull
             where TResult : notnull

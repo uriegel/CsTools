@@ -1,4 +1,3 @@
-using System.Reflection.PortableExecutable;
 using CsTools.Async;
 using CsTools.Extensions;
 
@@ -103,6 +102,46 @@ public static class AsyncResultExtensions
             return await Result<T, TE>.InternalBindErrorAwait(r, e => selector(e).ToResult());
         }
         return new(Bind());
+    }
+
+    /// <summary>
+    /// Performs a sideeffect on the OK value (if present)
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TE"></typeparam>
+    /// <param name="result"></param>
+    /// <param name="sideEffect">Function performing side effect on the OK value</param>
+    /// <returns></returns>
+    public static AsyncResult<T, TE> SideEffectWhenOk<T, TE>(this AsyncResult<T, TE> result, Action<T> sideEffect)
+        where T : notnull
+        where TE : notnull
+    {
+        async Task<Result<T, TE>> SideEffect()
+        {
+            var r = await result.resultTask;
+            return r.SideEffectWhenOk(sideEffect);
+        }
+        return new(SideEffect());
+    }
+
+    /// <summary>
+    /// Performs a sideeffect on the Error value (if present)
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TE"></typeparam>
+    /// <param name="result"></param>
+    /// <param name="sideEffect">Function performing side effect on the Error value</param>
+    /// <returns></returns>
+    public static AsyncResult<T, TE> SideEffectWhenError<T, TE>(this AsyncResult<T, TE> result, Action<TE> sideEffect)
+        where T : notnull
+        where TE : notnull
+    {
+        async Task<Result<T, TE>> SideEffect()
+        {
+            var r = await result.resultTask;
+            return r.SideEffectWhenError(sideEffect);
+        }
+        return new(SideEffect());
     }
 }
 
