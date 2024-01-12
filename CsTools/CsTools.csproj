@@ -4,9 +4,9 @@
   <targetFramework>net8.0</targetFramework>
 	<ImplicitUsings>enable</ImplicitUsings>
 	<Nullable>enable</Nullable>
-	<Version>7.9.1</Version>
-	<FileVersion>7.9.1.0</FileVersion>
-	<AssemblyVersion>7.9.1.0</AssemblyVersion>
+	<Version>7.10.0</Version>
+	<FileVersion>7.10.0.0</FileVersion>
+	<AssemblyVersion>7.10.0.0</AssemblyVersion>
 	<Authors>Uwe Riegel</Authors>
 	<Company>Uwe Riegel</Company>		
 	<Description>Tools for C#, mostly functional extensions for .NET Objects</Description>

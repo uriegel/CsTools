@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace CsTools.HttpRequest;
 
 public record Version(
@@ -17,5 +19,7 @@ public record Settings(
     Version Version,
     Header[]? Headers,
     Func<HttpContent>? AddContent,
-    int? Timeout = null
+    int? Timeout = null,
+    JsonSerializerOptions? JsonSerializerOptions = null,
+    int? ContentLengthInJsonPost = null
 );
