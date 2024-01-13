@@ -13,24 +13,17 @@ public class JsonRequest(string baseUrl)
         => PostAsync<T, TR>(request)
             .ToAsyncResult();
 
-    public AsyncResult<TR, RequestError> Post<T, TR>(RequestType<T> request, Settings settings)
-        where TR : notnull
-        => PostAsync<T, TR>(request, settings)
-            .ToAsyncResult();
-
-    async Task<Result<TR, RequestError>> PostAsync<T, TR>(RequestType<T> request, Settings? settings = null)
+    async Task<Result<TR, RequestError>> PostAsync<T, TR>(RequestType<T> request)
         where TR: notnull
     {
         try 
         {
-            using var msg = await Request.RunAsync((settings ?? DefaultSettings) with
+            using var msg = await Request.RunAsync(DefaultSettings with
             {
                 Method = HttpMethod.Post,
                 BaseUrl = baseUrl.EndsWith('/') ? baseUrl : baseUrl + "/",
                 Url = request.Method,
-                AddContent = settings?.ContentLengthInJsonPost.HasValue == true
-                    ? () => new CustomJsonContent(typeof(T), request.Payload!, settings?.JsonSerializerOptions)
-                    : () => JsonContent.Create(request.Payload)
+                AddContent = () => JsonContent.Create(request.Payload)
             }, true);
             return await msg.Content.ReadFromJsonAsync<Result<TR, RequestError>>();
         }
