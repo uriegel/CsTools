@@ -142,4 +142,15 @@ public static class GenericExtensions
     /// <returns></returns>
     public static TResult With<T, R, TResult>(this T t, Func<T, R> selector, Func<R, TResult> resultSelector)
         => resultSelector(selector(t));
+
+    /// <summary>
+    /// Take a value of T and perform a function resulting TR
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TR"></typeparam>
+    /// <param name="t"></param>
+    /// <param name="adapter"></param>
+    /// <returns></returns>
+    public static TR Adapt<T, TR>(this T t, Func<T, TR> adapter)
+        => adapter(t);
 }
