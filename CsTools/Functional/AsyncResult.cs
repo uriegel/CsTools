@@ -143,6 +143,26 @@ public static class AsyncResultExtensions
         }
         return new(SideEffect());
     }
+
+    /// <summary>
+    /// Performs a sideeffect on the Error value (if present)
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TE"></typeparam>
+    /// <param name="result"></param>
+    /// <param name="sideEffect">Function performing side effect on the Error value</param>
+    /// <returns></returns>
+    public static AsyncResult<T, TE> SideEffectWhenErrorAwait<T, TE>(this AsyncResult<T, TE> result, Func<TE, Task> sideEffect)
+        where T : notnull
+        where TE : notnull
+    {
+        async Task<Result<T, TE>> SideEffect()
+        {
+            var r = await result.resultTask;
+            return await r.SideEffectWhenErrorAsync(sideEffect);
+        }
+        return new(SideEffect());
+    }    
 }
 
 
