@@ -151,6 +151,24 @@ public static class GenericExtensions
     /// <param name="t"></param>
     /// <param name="adapter"></param>
     /// <returns></returns>
+    [Obsolete("please use Pipe")]
     public static TR Adapt<T, TR>(this T t, Func<T, TR> adapter)
         => adapter(t);
+
+    /// <summary>
+    /// Take a value of T and perform a function resulting TR
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TR"></typeparam>
+    /// <param name="t"></param>
+    /// <param name="adapter"></param>
+    /// <returns></returns>
+    public static TR Pipe<T, TR>(this T t, Func<T, TR> adapter)
+        => adapter(t);
+
+    public static bool And<T>(this T t, params Func<T, bool>[] predicates)
+        => predicates.Aggregate(true, (acc, predicate) => acc && predicate(t)); 
+
+    public static bool Or<T>(this T t, params Func<T, bool>[] predicates)
+        => predicates.Aggregate(true, (acc, predicate) => acc || predicate(t)); 
 }

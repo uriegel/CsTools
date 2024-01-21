@@ -2,11 +2,52 @@ using System.Net;
 using System.Net.Sockets;
 using CsTools.Extensions;
 using CsTools.Async;
+using CsTools.Functional;
+
+using static CsTools.Core;
 
 namespace CsTools.HttpRequest;
 
 public static class Request
 {
+    public static AsyncResult<HttpResponseMessage, RequestError> Run(Settings settings)
+        => ResultAsync(settings, false)
+            .ToAsyncResult();
+
+    public static AsyncResult<HttpResponseMessage, RequestError> Run(Settings settings, bool onlyHeaders)
+        => ResultAsync(settings, onlyHeaders)
+            .ToAsyncResult();
+
+    async static Task<Result<HttpResponseMessage, RequestError>> ResultAsync(Settings settings, bool onlyHeaders)
+    {
+        try 
+        {
+            var msg = await RawRunAsync(settings, onlyHeaders);
+            return Ok<HttpResponseMessage, RequestError>(msg);
+        }
+        catch (HttpException he) when (he.InnerException is System.Net.Http.HttpRequestException hre 
+                && hre.HttpRequestError == HttpRequestError.ConnectionError)
+        {
+            return Error<HttpResponseMessage, RequestError>(new(1001, hre.Message));
+        }
+        catch (HttpException he) when 
+            (he.InnerException is System.Net.Http.HttpRequestException hre 
+                && hre.HttpRequestError == HttpRequestError.NameResolutionError)
+        {
+            return Error<HttpResponseMessage, RequestError>(new(1002, hre.Message));
+        }
+        catch (HttpException he) when (he.InnerException is HttpRequestException hre) 
+        {
+            return Error<HttpResponseMessage, RequestError>(new((int)hre.Code + 1000, hre.Message));
+        }
+        catch (Exception e)
+        {
+            return Error<HttpResponseMessage, RequestError>(new(1000, e.Message));
+        }
+    }
+
+
+
     public static Task<HttpResponseMessage> RunAsync(Settings settings)
         => RawRunAsync(settings, false)
             .MapRequestException();

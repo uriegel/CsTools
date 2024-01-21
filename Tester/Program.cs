@@ -11,6 +11,54 @@ using CsTools.Functional;
 
 using static CsTools.Core;
 
+var settings = DefaultSettings with
+        {
+            Method = HttpMethod.Post,
+            BaseUrl = $"http://192.168.178.74:8080",
+            Url = "/remote/getfile",
+            AddContent = () => JsonContent.Create(new 
+                                { 
+                                    Path = "/Download/VID_20230919_162741.mp4"
+                                })
+        };
+
+var httpmsg = await Request.Run(settings, true)
+    .SideEffectWhenError(e => WriteLine($"Request error: {e}"))
+    .BindAwait(msg => msg.UseAwait(
+        msg => 
+            msg.Pipe(m => m.Content.Headers.ContentLength)
+                .Pipe(len => 
+            File
+                .Create("targetFilename")
+                .WithProgress((t, c) => WriteLine($"Copy progress: {c}/{len}"))
+                .UseAwait(
+            target => msg.CopyToStream(target)))))
+    .ToResult();
+
+ReadLine();
+
+var pipeRes = 
+    2
+        .Pipe(n => n + 8)
+        .Pipe(n => n / 2)
+        .Pipe(n => n.ToString())
+        .Pipe(s => "Das Ergebnis: " + s);
+
+var t = 7.And(
+    n => n < 16,
+    n => n % 2 == 1,
+    n => n > 4);
+
+t = 4.And(
+    n => n < 16,
+    n => n % 2 == 1,
+    n => n > 4);
+
+t = 3.And(
+    n => n < 16,
+    n => n % 2 == 1,
+    n => n > 4);
+
 var resOk = Ok<string, int>("Das ist das Gute");
 var resErr = Error<string, int>(9876);
 

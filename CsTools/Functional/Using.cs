@@ -19,6 +19,20 @@ public static class Using
         return actionWithDisposable(disposable);
     }
 
+    public static AsyncResult<TR, TE> UseAwait<TDisposable, TR, TE>(this TDisposable disposable, Func<TDisposable, AsyncResult<TR, TE>> actionWithDisposable)
+        where TDisposable : IDisposable
+        where TR: notnull
+        where TE: notnull
+    {
+        return UseAsync().ToAsyncResult();
+
+        async Task<Result<TR, TE>> UseAsync()
+        {
+            using var toDispose = disposable;
+            return await actionWithDisposable(toDispose).ToResult();
+        }
+    }
+
     public static async Task UseAsync<TDisposable>(this TDisposable disposable, Func<TDisposable, Task> actionWithDisposable)
         where TDisposable : IDisposable
     {
