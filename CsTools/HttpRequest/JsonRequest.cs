@@ -3,6 +3,7 @@ using CsTools.Functional;
 
 using static CsTools.HttpRequest.Core;
 using static CsTools.Core;
+using System.Net;
 
 namespace CsTools.HttpRequest;
 
@@ -51,7 +52,20 @@ public class JsonRequest(string baseUrl)
 
 public record RequestType<T>(string Method, T Payload);
 
+public enum CustomRequestError 
+{
+    Unknown = 1000,
+    ConnectionError,
+    NameResolutionError,
+    ResponseEnded,
+}
+
 public record RequestError(
     int Status,
     string StatusText
-);
+) {
+    public static RequestError Custom(CustomRequestError error, string message)
+        => new((int)error, message);
+    public static RequestError Custom(HttpStatusCode httpStatus, string message)
+        => new((int)CustomRequestError.Unknown + (int)httpStatus, message);
+}

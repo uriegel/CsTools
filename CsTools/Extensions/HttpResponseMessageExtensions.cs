@@ -21,10 +21,13 @@ public static class HttpResponseMessageExtensions
                     .CopyToAsync(target, cancellationToken ?? CancellationToken.None);
                 return Ok<HttpResponseMessage, RequestError>(msg);
             }
+            catch (HttpIOException hie) when (hie.HttpRequestError == HttpRequestError.ResponseEnded)
+            {
+                return Error<HttpResponseMessage, RequestError>(RequestError.Custom(CustomRequestError.ResponseEnded, hie.Message));
+            }
             catch (Exception e)
             {
-                // TODO which errors can occur?
-                return Error<HttpResponseMessage, RequestError>(new(1001, "Could not copy"));
+                return Error<HttpResponseMessage, RequestError>(RequestError.Custom(CustomRequestError.Unknown, e.Message));
             }
         }
     }

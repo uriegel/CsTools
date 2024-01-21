@@ -28,21 +28,21 @@ public static class Request
         catch (HttpException he) when (he.InnerException is System.Net.Http.HttpRequestException hre 
                 && hre.HttpRequestError == HttpRequestError.ConnectionError)
         {
-            return Error<HttpResponseMessage, RequestError>(new(1001, hre.Message));
+            return Error<HttpResponseMessage, RequestError>(RequestError.Custom(CustomRequestError.ConnectionError, hre.Message));
         }
         catch (HttpException he) when 
             (he.InnerException is System.Net.Http.HttpRequestException hre 
                 && hre.HttpRequestError == HttpRequestError.NameResolutionError)
         {
-            return Error<HttpResponseMessage, RequestError>(new(1002, hre.Message));
+            return Error<HttpResponseMessage, RequestError>(RequestError.Custom(CustomRequestError.NameResolutionError, hre.Message));
         }
         catch (HttpException he) when (he.InnerException is HttpRequestException hre) 
         {
-            return Error<HttpResponseMessage, RequestError>(new((int)hre.Code + 1000, hre.Message));
+            return Error<HttpResponseMessage, RequestError>(RequestError.Custom(hre.Code, hre.Message));
         }
         catch (Exception e)
         {
-            return Error<HttpResponseMessage, RequestError>(new(1000, e.Message));
+            return Error<HttpResponseMessage, RequestError>(RequestError.Custom(CustomRequestError.Unknown, e.Message));
         }
     }
 
