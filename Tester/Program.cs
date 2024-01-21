@@ -37,6 +37,32 @@ var httpmsg = await Request.Run(settings, true)
 
 ReadLine();
 
+
+Settings PostFile(Stream streamToPost, DateTime lastWriteTime)
+    => DefaultSettings with
+        {
+            Method = HttpMethod.Post,
+            BaseUrl = $"http://192.168.178.74:8080",
+            Url = "/remote/postfile?path=/Download/test.mp4",
+            Timeout = 100_000_000,
+            AddContent = () => new StreamContent(streamToPost, 8100)
+                                    .SideEffect(n => n  
+                                                        .Headers
+                                                        .TryAddWithoutValidation(
+                                                            "x-file-date", 
+                                                            new DateTimeOffset(lastWriteTime).ToUnixTimeMilliseconds().ToString()))
+        };
+
+var httpRes = await Request.Run(PostFile(
+    File
+        .OpenRead("/speicher/Videos/Ali.mkv")
+        .WithProgress((t, c) => WriteLine($"Copy progress: {c}/{t}")), 
+    DateTime.Now - TimeSpan.FromDays(7)), true)
+    .SideEffectWhenError(e => WriteLine($"Request error: {e}"))
+    .ToResult();
+
+ReadLine();
+
 var pipeRes = 
     2
         .Pipe(n => n + 8)
