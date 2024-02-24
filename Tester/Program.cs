@@ -10,6 +10,16 @@ using static CsTools.HttpRequest.Core;
 using CsTools.Functional;
 
 using static CsTools.Core;
+using System.Text.Json;
+
+JsonSerializerOptions options = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase, // Case-insensitive (camelCase)
+        };
+        
+var jsonGetRequest = new JsonRequest("http://192.168.178.74:8080");
+var result2 = jsonGetRequest.Get<FileType[]>("getfiles");
+var res22 = await result2.ToResult();
 
 var settings = DefaultSettings with
         {
@@ -267,6 +277,8 @@ await msg
 ReadLine();
 
 record FileItem(string Path, long Size);
+
+record FileType(string Name, bool IsDirectory, long Size, bool IsHidden, long Time);
 
 record Request2(string Name, int Id);
 record RequestWrong(string NoName, bool Id);
