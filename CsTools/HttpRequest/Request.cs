@@ -117,6 +117,7 @@ public static class Request
             : await Client.Get().SendAsync(request, onlyHeaders ? HttpCompletionOption.ResponseHeadersRead : HttpCompletionOption.ResponseContentRead);
         return 
             response.StatusCode == HttpStatusCode.OK 
+            || response.StatusCode == HttpStatusCode.NoContent
             || response.StatusCode == HttpStatusCode.NotModified
         ? response
         : throw new HttpRequestException(response.StatusCode, response.ReasonPhrase ?? $"{response.StatusCode}", response);

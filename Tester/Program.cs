@@ -16,7 +16,28 @@ JsonSerializerOptions options = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase, // Case-insensitive (camelCase)
         };
-        
+
+// ===================== test android server
+
+for (var i = 0; i < 30; i++)
+{
+    var msgp = await Request.RunAsync(DefaultSettings with
+                {
+                    Method = HttpMethod.Post,
+                    // BaseUrl = "http://localhost:2000",
+                    // Url = "/file/post",
+                    BaseUrl = "http://192.168.178.74:8080",
+                    Url = "/postfile/Pictures/affe.jpg",
+                    AddContent = () => new StreamContent(File.OpenRead("/home/uwe/Urlaub/20230911_141054.jpg"), 8100)
+                }, false);
+    WriteLine($"Der Code: {msgp.StatusCode}");
+}
+
+
+var jsonPostRequest = new JsonRequest("http://192.168.178.74:8080");
+
+// ===================== test android server
+
 var jsonGetRequest = new JsonRequest("http://192.168.178.74:8080");
 var result2 = jsonGetRequest.Get<FileType[]>("getfiles");
 var res22 = await result2.ToResult();
