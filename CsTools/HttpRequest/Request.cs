@@ -118,6 +118,7 @@ public static class Request
         return 
             response.StatusCode == HttpStatusCode.OK 
             || response.StatusCode == HttpStatusCode.NoContent
+            || response.StatusCode == HttpStatusCode.Created
             || response.StatusCode == HttpStatusCode.NotModified
         ? response
         : throw new HttpRequestException(response.StatusCode, response.ReasonPhrase ?? $"{response.StatusCode}", response);

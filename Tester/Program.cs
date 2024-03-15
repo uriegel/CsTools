@@ -23,11 +23,11 @@ for (var i = 0; i < 30; i++)
 {
     var msgp = await Request.RunAsync(DefaultSettings with
                 {
-                    Method = HttpMethod.Post,
+                    Method = HttpMethod.Put,
                     // BaseUrl = "http://localhost:2000",
                     // Url = "/file/post",
                     BaseUrl = "http://192.168.178.74:8080",
-                    Url = "/postfile/Pictures/affe.jpg",
+                    Url = "/putfile/Pictures/affe.jpg",
                     AddContent = () => new StreamContent(File.OpenRead("/home/uwe/Urlaub/20230911_141054.jpg"), 8100)
                 }, false);
     WriteLine($"Der Code: {msgp.StatusCode}");

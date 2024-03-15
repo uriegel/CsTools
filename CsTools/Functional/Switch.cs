@@ -2,14 +2,20 @@ namespace CsTools.Functional;
 
 public static class ChooseExtensions
 {
-    // TODO
-    // public static TResult? Choose<TResult, T>(this T t, params SwitchType<T, TResult>[] switches)
-    //     where TResult : notnull
-    //     => switches
-    //         .FirstOrDefault(s => s.Predicate(t))
-    //         .Select(s => s.Selector(t));
+    public static TResult? Choose<TResult, T>(this T t, params SwitchType<T, TResult>[] switches)
+        where T : notnull
+        where TResult : class
+    {
+        var switchType = switches
+                   .FirstOrDefault(s => s.Predicate(t));
+        return switchType != null
+                ? switchType.Selector(t)
+                : null;
+    }
 
     public record SwitchType<T, TResult>(Predicate<T> Predicate, Func<T, TResult> Selector)
+        where T : notnull
+        where TResult : notnull
     {
         public static SwitchType<T, TResult> Switch(Predicate<T> predicate, Func<T, TResult> selector)
             => new(predicate, selector);
@@ -17,3 +23,4 @@ public static class ChooseExtensions
             => new(_ => true, selector);
     };
 }
+
