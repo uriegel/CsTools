@@ -52,7 +52,7 @@ public static class GenericExtensions
     /// <param name="value"></param>
     /// <param name="selector"></param>
     /// <returns></returns>
-    public static async Task<T> SideEffectAsync<T>(this Task<T> value, Func<T, Task> selector)
+    public static async Task<T> SideEffectAwait<T>(this Task<T> value, Func<T, Task> selector)
     {
         var val = await value;
         await selector(val);
