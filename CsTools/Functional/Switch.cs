@@ -5,14 +5,9 @@ public static class ChooseExtensions
     public static TResult? Choose<TResult, T>(this T t, params SwitchType<T, TResult>[] switches)
         where T : notnull
         where TResult : class
-    {
-        var switchType = switches
-                   .FirstOrDefault(s => s.Predicate(t));
-        return switchType != null
-                ? switchType.Selector(t)
-                : null;
-    }
-
+        => switches
+            .FirstOrDefault(s => s.Predicate(t))
+            ?.Selector(t);
     public record SwitchType<T, TResult>(Predicate<T> Predicate, Func<T, TResult> Selector)
         where T : notnull
         where TResult : notnull

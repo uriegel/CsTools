@@ -35,6 +35,32 @@ public static class Memoization
 		};
 	}
 
+	public static Func<T?> MemoizeMaybe<T>(Func<T?> functionToMemoize, Resetter? resetter = null) 
+	{
+		var refCell = new RefCell<(T? value, bool valid)>();
+		resetter?.SetResetAction(() => refCell.Value.valid = false);
+		var locker = new object();
+		return () =>
+		{
+            if (refCell.Value.valid)
+                return refCell.Value.value;
+			else
+			{
+				lock (locker)
+				{
+                    if (refCell.Value.valid)
+                        return refCell.Value.value;
+                    else
+                    {
+						refCell.Value.value = functionToMemoize();
+                        refCell.Value.valid = true;
+                        return refCell.Value.value;
+					}
+				}
+			}
+		};
+	}
+
     public static Func<Task<T>> MemoizeAsync<T>(Func<Task<T>> functionToMemoize, Resetter? resetter = null) 
 		where T : notnull
         => MemoizeAsync((T? oldValue) => functionToMemoize(), resetter)!;
