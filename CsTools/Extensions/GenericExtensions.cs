@@ -38,11 +38,27 @@ public static class GenericExtensions
     /// <param name="t"></param>
     /// <param name="selector"></param>
     /// <returns></returns>
-    public static async Task<T> SideEffect<T>(this T t, Func<T, Task> selector)
+    public static async Task<T> SideEffectAsync<T>(this T t, Func<T, Task> selector)
     {
         await selector(t);
         return t;
     }
+
+    /// <summary>
+    /// This SideEffect is useful if you want to apply some awaitable side effect to a value in a LINQ expression,
+    /// such as logging the value. 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="value"></param>
+    /// <param name="selector"></param>
+    /// <returns></returns>
+    public static async Task<T> SideEffectAsync<T>(this Task<T> value, Func<T, Task> selector)
+    {
+        var val = await value;
+        await selector(val);
+        return val;
+    }
+
 
     /// <summary>
     /// This SideEffect is useful if you want to apply some side effect to a value in a LINQ expression,

@@ -24,7 +24,7 @@ public static class ProcessCmd
             }
         }
             .SideEffect(p => p.Start())
-            .SideEffect(p => p.WaitForExitAsync());
+            .SideEffectAsync(p => p.WaitForExitAsync());
         
         return 
             (await proc.StandardOutput.ReadToEndAsync()).WhiteSpaceToNull()
