@@ -23,7 +23,7 @@ public static class GenericExtensions
     /// <param name="value"></param>
     /// <param name="sideEffect"></param>
     /// <returns></returns>
-    public static async Task<T> SideEffect<T>(this Task<T> value, Action<T> sideEffect)
+    public static async Task<T> SideEffectAsync<T>(this Task<T> value, Action<T> sideEffect)
     {
         var val = await value;
         sideEffect(val);
