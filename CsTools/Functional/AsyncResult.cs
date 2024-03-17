@@ -105,7 +105,7 @@ public static class AsyncResultExtensions
     }
 
     /// <summary>
-    /// Performs a sideeffect on the OK value (if present)
+    /// Performs a side effect on the OK value (if present)
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TE"></typeparam>
@@ -120,6 +120,26 @@ public static class AsyncResultExtensions
         {
             var r = await result.resultTask;
             return r.SideEffectWhenOk(sideEffect);
+        }
+        return new(SideEffect());
+    }
+
+    /// <summary>
+    /// Performs a side effect on the OK value (if present)
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TE"></typeparam>
+    /// <param name="result"></param>
+    /// <param name="sideEffect">Function performing side effect on the OK value</param>
+    /// <returns></returns>
+    public static AsyncResult<T, TE> SideEffectWhenOkAwait<T, TE>(this AsyncResult<T, TE> result, Func<T, Task> sideEffect)
+        where T : notnull
+        where TE : notnull
+    {
+        async Task<Result<T, TE>> SideEffect()
+        {
+            var r = await result.resultTask;
+            return await r.SideEffectWhenOkAsync(sideEffect);
         }
         return new(SideEffect());
     }

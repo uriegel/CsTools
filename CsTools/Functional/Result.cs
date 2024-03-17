@@ -152,6 +152,12 @@ namespace CsTools.Functional
 
     public static class ResultExtensions
     {
+        public static Result<T, Unit> FromNullable<T>(this T? t)
+            where T : notnull
+            => t != null
+                ? Ok<T, Unit>(t)
+                : Error<T, Unit>(Unit.Value);
+
         /// <summary>
         /// Pattern matching for Result 
         /// </summary>
