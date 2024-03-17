@@ -183,6 +183,27 @@ public static class AsyncResultExtensions
         }
         return new(SideEffect());
     }    
+
+    public static AsyncResult<T, TE> RepeatOnError<T, TE>(Func<AsyncResult<T, TE>> func, int repeatCount, TimeSpan waitTime)
+        where T : notnull
+        where TE : notnull
+    {
+        async Task<Result<T, TE>> RepeatOnError()
+        {
+            var i = 0;
+            while (true)
+            {
+                var res = await func().ToResult();
+                if (!res.IsError)
+                    return res;
+                if (repeatCount == i)
+                    return res;
+                await Task.Delay(waitTime);
+                i++;
+            }
+        }
+        return RepeatOnError().ToAsyncResult();
+    }
 }
 
 
