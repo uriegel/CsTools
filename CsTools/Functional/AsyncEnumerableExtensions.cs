@@ -81,4 +81,8 @@ public static class IAsyncEnumerableExtensions
         foreach (var val in await asyncValues)
             yield return val;
     }
+
+    public static async Task<T[]> ToArrayAwait<T>(this IAsyncEnumerable<T> asyncEnum)
+        => await asyncEnum.ToArrayAsync();
+
 }
