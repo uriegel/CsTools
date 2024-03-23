@@ -1,17 +1,16 @@
 ﻿using CsTools;
 using CsTools.Extensions;
 using CsTools.HttpRequest;
+using CsTools.Functional;
+using System.Text.Json;
 using System.Net.Http.Json;
 
 using static System.Console;
 using static CsTools.Functional.Tree;
 using static CsTools.ProcessCmd;
 using static CsTools.HttpRequest.Core;
-using CsTools.Functional;
-
 using static CsTools.Core;
-using System.Text.Json;
-
+using static CsTools.WithLogging;
 
 var home = "HOME".GetEnvironmentVariable();
 home = GetEnvironmentVariable("HOME");

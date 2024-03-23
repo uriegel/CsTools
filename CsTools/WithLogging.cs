@@ -3,7 +3,7 @@ namespace CsTools;
 using CsTools.Extensions;
 using static CsTools.Functional.Memoization;
 
-public static partial class Core
+public static partial class WithLogging
 {
     static Func<string, string?, string?> Init {get; } 
         = (key, _) => key.GetEnvironmentVariableWithLogging();
