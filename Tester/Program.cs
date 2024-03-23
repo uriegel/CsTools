@@ -12,6 +12,14 @@ using CsTools.Functional;
 using static CsTools.Core;
 using System.Text.Json;
 
+
+var home = GetEnvironmentVariable("HOME");
+
+Logging.Use(LoggingKind.GetEnvironmentVariable);
+
+var logName = GetEnvironmentVariable("LOGNAME");
+logName = GetEnvironmentVariable("LOGNAME");
+
 JsonSerializerOptions options = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase, // Case-insensitive (camelCase)
@@ -185,7 +193,7 @@ ReadLine();
 int Divide(int a, int d)
     => a / d;
 
-var home = CsTools.Directory.GetHomeDir();
+home = CsTools.Directory.GetHomeDir();
 var docs = CsTools.Directory.GetDocumentsDir();
 
 var dict = new Dictionary<string, int>
