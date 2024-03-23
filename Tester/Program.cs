@@ -13,12 +13,9 @@ using static CsTools.Core;
 using System.Text.Json;
 
 
-var home = GetEnvironmentVariable("HOME");
-
-Logging.Use(LoggingKind.GetEnvironmentVariable);
-
-var logName = GetEnvironmentVariable("LOGNAME");
-logName = GetEnvironmentVariable("LOGNAME");
+var home = "HOME".GetEnvironmentVariable();
+home = GetEnvironmentVariable("HOME");
+home = GetEnvironmentVariable("HOME");
 
 JsonSerializerOptions options = new JsonSerializerOptions
         {
