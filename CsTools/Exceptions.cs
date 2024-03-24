@@ -72,7 +72,7 @@ public partial class Core
         {
             if (repeatCount == 0)
                 throw;
-            return RepeatOnException(func, repeatCount--);
+            return RepeatOnException(func, --repeatCount);
         }
     }
 
@@ -88,7 +88,7 @@ public partial class Core
                 throw;
             if (delay.HasValue)
                 await Task.Delay(delay.Value);
-            return await RepeatOnException(func, repeatCount--, delay);
+            return await RepeatOnException(func, --repeatCount, delay);
         }
     }
 }
