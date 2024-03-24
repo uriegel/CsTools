@@ -12,14 +12,18 @@ using static CsTools.HttpRequest.Core;
 using static CsTools.Core;
 using static CsTools.WithLogging;
 
+var pw = Password
+            .ReadPassword()
+            .ReadSecureString();
+
 var home = "HOME".GetEnvironmentVariable();
 home = GetEnvironmentVariable("HOME");
 home = GetEnvironmentVariable("HOME");
 
-JsonSerializerOptions options = new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase, // Case-insensitive (camelCase)
-        };
+JsonSerializerOptions options = new()
+{
+    PropertyNamingPolicy = JsonNamingPolicy.CamelCase, // Case-insensitive (camelCase)
+};
 
 // ===================== test android server
 
