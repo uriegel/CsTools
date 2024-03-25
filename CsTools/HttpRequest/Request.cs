@@ -46,8 +46,6 @@ public static class Request
         }
     }
 
-
-
     public static Task<HttpResponseMessage> RunAsync(Settings settings)
         => RawRunAsync(settings, false)
             .MapRequestException();

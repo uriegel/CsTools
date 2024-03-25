@@ -31,4 +31,29 @@ public static class HttpResponseMessageExtensions
             }
         }
     }
+
+    public static AsyncResult<string, RequestError> ReadAsStringAwait(this HttpResponseMessage msg)
+    {
+        return ReadAsStringAwait().ToAsyncResult();
+        
+        async Task<Result<string, RequestError>> ReadAsStringAwait()
+        {
+            try 
+            {
+                var text = await msg
+                                    .Content
+                                    .ReadAsStringAsync();
+                return Ok<string, RequestError>(text);
+            }
+            catch (HttpIOException hie) when (hie.HttpRequestError == HttpRequestError.ResponseEnded)
+            {
+                return Error<string, RequestError>(RequestError.Custom(CustomRequestError.ResponseEnded, hie.Message));
+            }
+            catch (Exception e)
+            {
+                return Error<string, RequestError>(RequestError.Custom(CustomRequestError.Unknown, e.Message));
+            }
+        }
+    }
+    
 }
