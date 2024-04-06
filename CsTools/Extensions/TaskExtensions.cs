@@ -2,6 +2,12 @@ namespace CsTools.Extensions;
 
 public static class TaskExtensions
 {
+    public static async Task<Unit> ToUnit(this Task t) 
+    {
+        await t;
+        return Unit.Value;
+    }
+
     /// <summary>
     /// Important: the task must be created, so you have to use an "async Task" function, not a "Task function" 
     /// which returns "this Task&lt;T&gt; t" as the input parameter this extension method uses. Otherwise exceptions thrown on the calling thread (before the first await) are not catched!
