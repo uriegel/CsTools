@@ -36,6 +36,34 @@ public static class StringExtensions
     }
 
     /// <summary>
+    /// Returns a substring after a found last char, not including the char
+    /// </summary>
+    /// <param name="str"></param>
+    /// <param name="lastStartChar"></param>
+    /// <returns></returns>
+    public static string SubstringAfterLast(this string? str, char lastStartChar)
+    {
+        var posStart = str?.LastIndexOf(lastStartChar) + 1 ?? -1;
+        return posStart != -1 && posStart < str!.Length - 1
+        ? str[posStart..]
+        : "";
+    }
+
+    /// <summary>
+    /// Returns a substring after a found last substring, not including the substring
+    /// </summary>
+    /// <param name="str"></param>
+    /// <param name="lastStartStr"></param>
+    /// <returns></returns>
+    public static string SubstringAfterLast(this string? str, string lastStartStr)
+    {
+        var posStart = str?.LastIndexOf(lastStartStr) + lastStartStr.Length ?? -1;
+        return posStart != -1 && posStart < str!.Length - 1
+        ? str.Substring(posStart)
+        : "";
+    }
+
+    /// <summary>
     /// Returns a substring, until a char in the string is found, not including the found char
     /// </summary>
     /// <param name="str"></param>
@@ -58,6 +86,34 @@ public static class StringExtensions
     public static string SubstringUntil(this string? str, string endStr)
     {
         var posEnd = str?.IndexOf(endStr) ?? 0;
+        return posEnd > 0
+        ? str!.Substring(0, posEnd)
+        : str ?? "";
+    }
+
+    /// <summary>
+    /// Returns a substring, until a char in the string is found, not including the found char
+    /// </summary>
+    /// <param name="str"></param>
+    /// <param name="lastEndChar"></param>
+    /// <returns></returns>
+    public static string SubstringUntilLast(this string? str, char lastEndChar)
+    {
+        var posEnd = str?.LastIndexOf(lastEndChar) ?? 0;
+        return posEnd > 0
+        ? str!.Substring(0, posEnd)
+        : str ?? "";
+    }
+
+    /// <summary>
+    /// Returns a substring, until a substring in the string is found, not including the found substring
+    /// </summary>
+    /// <param name="str"></param>
+    /// <param name="lastEndStr"></param>
+    /// <returns></returns>
+    public static string SubstringUntilLast(this string? str, string lastEndStr)
+    {
+        var posEnd = str?.LastIndexOf(lastEndStr) ?? 0;
         return posEnd > 0
         ? str!.Substring(0, posEnd)
         : str ?? "";
