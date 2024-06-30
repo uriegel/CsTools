@@ -9,12 +9,15 @@ namespace CsTools.HttpRequest;
 
 public class JsonRequest(string baseUrl)
 {
-    public AsyncResult<TR, RequestError> Get<TR>(string url)
+    public AsyncResult<TR, RequestError> Get<TR>(string url, bool httpStatusResult = false)
         where TR : notnull
-        => GetAsync<TR>(url)
-            .ToAsyncResult();
+        => httpStatusResult 
+            ?  GetAsync<TR>(url, true)
+                .ToAsyncResult()
+            : GetResultAsync<TR>(url)
+                .ToAsyncResult();
 
-    async Task<Result<TR, RequestError>> GetAsync<TR>(string url)
+    async Task<Result<TR, RequestError>> GetResultAsync<TR>(string url)
         where TR: notnull
     {
         try 
@@ -22,8 +25,8 @@ public class JsonRequest(string baseUrl)
             using var msg = await Request.RunAsync(DefaultSettings with
             {
                 Method = HttpMethod.Get,
-                BaseUrl = baseUrl.EndsWith('/') ? baseUrl : baseUrl + "/",
-                Url = url
+                BaseUrl = baseUrl.EndsWith('/') ? baseUrl[..^1] : baseUrl,
+                Url = url.StartsWith('/') ? url : "/" + url
             }, true);
 
             return await msg.Content.ReadFromJsonAsync<Result<TR, RequestError>>();
@@ -42,6 +45,41 @@ public class JsonRequest(string baseUrl)
         catch (HttpException he) when (he.InnerException is HttpRequestException hre) 
         {
             return Error<TR, RequestError>(new((int)hre.Code + 1000, hre.Message));
+        }
+        catch (Exception e)
+        {
+            return Error<TR, RequestError>(new(1000, e.Message));
+        }
+    }
+
+    async Task<Result<TR, RequestError>> GetAsync<TR>(string url, bool preserveStatusCode)
+        where TR: notnull
+    {
+        try 
+        {
+            using var msg = await Request.RunAsync(DefaultSettings with
+            {
+                Method = HttpMethod.Get,
+                BaseUrl = baseUrl.EndsWith('/') ? baseUrl[..^1] : baseUrl,
+                Url = url.StartsWith('/') ? url : "/" + url
+            }, true);
+
+            return (await msg.Content.ReadFromJsonAsync<TR>())!;
+        }
+        catch (HttpException he) when (he.InnerException is System.Net.Http.HttpRequestException hre 
+                && hre.HttpRequestError == HttpRequestError.ConnectionError)
+        {
+            return Error<TR, RequestError>(new(1001, hre.Message));
+        }
+        catch (HttpException he) when 
+            (he.InnerException is System.Net.Http.HttpRequestException hre 
+                && hre.HttpRequestError == HttpRequestError.NameResolutionError)
+        {
+            return Error<TR, RequestError>(new(1002, hre.Message));
+        }
+        catch (HttpException he) when (he.InnerException is HttpRequestException hre) 
+        {
+            return Error<TR, RequestError>(new((int)hre.Code + (preserveStatusCode ? 0 : 1000), hre.Message));
         }
         catch (Exception e)
         {

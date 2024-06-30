@@ -25,6 +25,31 @@ JsonSerializerOptions options = new()
     PropertyNamingPolicy = JsonNamingPolicy.CamelCase, // Case-insensitive (camelCase)
 };
 
+var jsonGetRequest = new JsonRequest("http://pluto7:2000");
+var result2 = jsonGetRequest.Get<FileType[]>("/getfiles", true);
+var res22 = await result2.ToResult();
+jsonGetRequest = new JsonRequest("http://pluto:1000");
+result2 = jsonGetRequest.Get<FileType[]>("/getfiles", true);
+res22 = await result2.ToResult();
+jsonGetRequest = new JsonRequest("http://pluto:8080");
+result2 = jsonGetRequest.Get<FileType[]>("/getfiles/home/uwe/nichts", true);
+res22 = await result2.ToResult();
+jsonGetRequest = new JsonRequest("http://pluto:8080");
+result2 = jsonGetRequest.Get<FileType[]>("/getfiles/home/uwe", true);
+res22 = await result2.ToResult();
+jsonGetRequest = new JsonRequest("http://pluto:8080");
+result2 = jsonGetRequest.Get<FileType[]>("/getfiles", true);
+res22 = await result2.ToResult();
+jsonGetRequest = new JsonRequest("http://pluto:8080");
+result2 = jsonGetRequest.Get<FileType[]>("getfiles", true);
+res22 = await result2.ToResult();
+jsonGetRequest = new JsonRequest("http://pluto:8080/");
+result2 = jsonGetRequest.Get<FileType[]>("getfiles", true);
+res22 = await result2.ToResult();
+jsonGetRequest = new JsonRequest("http://pluto:8080/");
+result2 = jsonGetRequest.Get<FileType[]>("/getfiles", true);
+res22 = await result2.ToResult();
+
 // ===================== test android server
 
 for (var i = 0; i < 30; i++)
@@ -46,9 +71,9 @@ var jsonPostRequest = new JsonRequest("http://192.168.178.74:8080");
 
 // ===================== test android server
 
-var jsonGetRequest = new JsonRequest("http://192.168.178.74:8080");
-var result2 = jsonGetRequest.Get<FileType[]>("getfiles");
-var res22 = await result2.ToResult();
+jsonGetRequest = new JsonRequest("http://192.168.178.74:8080");
+result2 = jsonGetRequest.Get<FileType[]>("getfiles");
+res22 = await result2.ToResult();
 
 var settings = DefaultSettings with
         {
