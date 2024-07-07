@@ -15,5 +15,5 @@ public class ProcessCmdException : Exception
     public override string ToString()
     => exception?.ToString() ?? Message;
 
-    Exception? exception;
+    readonly Exception? exception;
 }

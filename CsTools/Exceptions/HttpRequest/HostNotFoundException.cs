@@ -1,8 +1,4 @@
 namespace CsTools.HttpRequest;
 
-public class HostNotFoundException : HttpException
-{
-    public HostNotFoundException(string message)
-        : base(message)
-    {}
-}
+public class HostNotFoundException(string message) 
+    : HttpException(message) { }

@@ -15,7 +15,7 @@ public static class Tree
                                     ? isSubtree(item, state)
                                         ? infos.SideEffect(l => l.AddRange(resolver(item, state).Flatten(resolver, selector, isSubtree, cancellation, state, addSubState)))
                                         : infos.SideEffect(l => l.Add(selector(item, state)))
-                                    : new List<TResult>());
+                                    : []);
 
     static IEnumerable<TResult> Flatten<T, TState, TResult>(this (IEnumerable<T> subItems, TState? state) items, Func<T, TState?, (IEnumerable<T>, TState?)> resolver, 
             Func<T, TState?, TResult> selector, Func<T, TState?, bool> isSubtree, CancellationToken? cancellation, 

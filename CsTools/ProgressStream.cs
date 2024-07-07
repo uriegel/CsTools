@@ -3,18 +3,12 @@ namespace CsTools;
 /// <summary>
 /// Stream wrapper to get a progress feedback when copying bytes to or from the underlying stream
 /// </summary>
-public class ProgressStream : Stream
+public class ProgressStream(Stream innerStream, OnCopyProgress onProgress) : Stream
 {
-    public ProgressStream(Stream innerStream, OnCopyProgress onProgress)
-    {
-        this.innerStream = innerStream;
-        this.onProgress = onProgress;
-    }
-
     public override void Close() => innerStream.Close();
 
-    Stream innerStream;
-    OnCopyProgress onProgress;
+    readonly Stream innerStream = innerStream;
+    readonly OnCopyProgress onProgress = onProgress;
 
     #region Stream
 
@@ -29,7 +23,7 @@ public class ProgressStream : Stream
     public override long Position 
     { 
         get => innerStream.Position; 
-        set => value = innerStream.Position; 
+        set {}
     }
 
     public override void Flush() => innerStream.Flush();

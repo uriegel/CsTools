@@ -1,8 +1,6 @@
 using System.Globalization;
 using CsTools.Functional;
 
-using static CsTools.Core;
-
 namespace CsTools.Extensions;
 
 public static class StringExtensions
@@ -17,7 +15,7 @@ public static class StringExtensions
     {
         var posStart = str?.IndexOf(startChar) + 1 ?? -1;
         return posStart != -1 && posStart < str!.Length - 1
-        ? str.Substring(posStart)
+        ? str[posStart..]
         : "";
     }
 
@@ -31,7 +29,7 @@ public static class StringExtensions
     {
         var posStart = str?.IndexOf(startStr) + startStr.Length ?? -1;
         return posStart != -1 && posStart < str!.Length - 1
-        ? str.Substring(posStart)
+        ? str[posStart..]
         : "";
     }
 
@@ -59,7 +57,7 @@ public static class StringExtensions
     {
         var posStart = str?.LastIndexOf(lastStartStr) + lastStartStr.Length ?? -1;
         return posStart != -1 && posStart < str!.Length - 1
-        ? str.Substring(posStart)
+        ? str[posStart..]
         : "";
     }
 
@@ -73,7 +71,7 @@ public static class StringExtensions
     {
         var posEnd = str?.IndexOf(endChar) ?? 0;
         return posEnd > 0
-        ? str!.Substring(0, posEnd)
+        ? str![..posEnd]
         : str ?? "";
     }
 
@@ -87,7 +85,7 @@ public static class StringExtensions
     {
         var posEnd = str?.IndexOf(endStr) ?? 0;
         return posEnd > 0
-        ? str!.Substring(0, posEnd)
+        ? str![..posEnd]
         : str ?? "";
     }
 
@@ -101,7 +99,7 @@ public static class StringExtensions
     {
         var posEnd = str?.LastIndexOf(lastEndChar) ?? 0;
         return posEnd > 0
-        ? str!.Substring(0, posEnd)
+        ? str![..posEnd]
         : str ?? "";
     }
 
@@ -115,7 +113,7 @@ public static class StringExtensions
     {
         var posEnd = str?.LastIndexOf(lastEndStr) ?? 0;
         return posEnd > 0
-        ? str!.Substring(0, posEnd)
+        ? str![..posEnd]
         : str ?? "";
     }
 

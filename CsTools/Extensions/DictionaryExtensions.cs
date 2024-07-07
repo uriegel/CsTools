@@ -8,9 +8,7 @@ public static class DictionaryExtensions
     public static V? GetValue<K, V>(this IDictionary<K, V> dictionary, K key)
         where V : class 
     => dictionary.TryGetValue(key, out var value)
-        ? value != null
-            ? value
-            : default
+        ? value ?? default
         : default;
 
     public static V? TryGetValue<K, V>(this IDictionary<K, V> dictionary, K key)

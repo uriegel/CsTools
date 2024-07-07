@@ -171,7 +171,8 @@ public static partial class Core
     public static IEnumerable<T> ConcatEnumerables<T>(params IEnumerable<T>[] args)
     {
         var notNulls = args.Where(n => n != null);
-        IEnumerable<T> concat(IEnumerable<T> e, IEnumerable<IEnumerable<T>> tail)
+
+        static IEnumerable<T> concat(IEnumerable<T> e, IEnumerable<IEnumerable<T>> tail)
         {
             if (!tail.Any())
                 return e ?? Enumerable.Empty<T>();

@@ -1,6 +1,4 @@
 namespace CsTools.HttpRequest;
 
-public class RequestInvalidOperationException : HttpException
-{
-    public RequestInvalidOperationException(InvalidOperationException ioe) : base(ioe.Message, ioe) {} 
-}
+public class RequestInvalidOperationException(InvalidOperationException ioe) 
+    : HttpException(ioe.Message, ioe) { }

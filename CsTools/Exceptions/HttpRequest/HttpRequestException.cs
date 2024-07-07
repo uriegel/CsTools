@@ -2,15 +2,9 @@ namespace CsTools.HttpRequest;
 
 using System.Net;
 
-public class HttpRequestException : HttpException
+public class HttpRequestException(HttpStatusCode code, string text, HttpResponseMessage msg) 
+    : HttpException(text)
 {
-    public HttpRequestException(HttpStatusCode code, string text, HttpResponseMessage msg)
-        : base(text)
-    {
-        Code = code;
-        Msg = msg;
-    }
-
-    public HttpStatusCode Code { get; }
-    public HttpResponseMessage Msg { get; }
+    public HttpStatusCode Code { get; } = code;
+    public HttpResponseMessage Msg { get; } = msg;
 }

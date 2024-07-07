@@ -3,17 +3,11 @@ namespace CsTools;
 /// <summary>
 /// Stream wrapper of a stream without Length to a stream with Length property set
 /// </summary>
-public class LengthStream : Stream
+public class LengthStream(Stream innerStream, long length) : Stream
 {
-    public LengthStream(Stream innerStream, long length)
-    {
-        this.innerStream = innerStream;
-        Length = length;
-    }
-
     public override void Close() => innerStream.Close();
 
-    internal Stream innerStream;
+    internal Stream innerStream = innerStream;
 
     #region Stream
 
@@ -23,12 +17,12 @@ public class LengthStream : Stream
 
     public override bool CanWrite => innerStream.CanWrite;
 
-    public override long Length { get; }
+    public override long Length { get; } = length;
 
-    public override long Position 
-    { 
-        get => innerStream.Position; 
-        set => value = innerStream.Position; 
+    public override long Position
+    {
+        get => innerStream.Position;
+        set { }
     }
 
     public override void Flush() => innerStream.Flush();
