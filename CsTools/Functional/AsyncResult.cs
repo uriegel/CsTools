@@ -184,6 +184,13 @@ public static class AsyncResultExtensions
         return new(SideEffect());
     }    
 
+    public static async Task<T> GetOrThrowAsync<T, TE>(this AsyncResult<T, TE> result)
+        where T : notnull
+        where TE : Exception
+        => (await result
+            .ToResult())
+            .Match(ok => ok, error => throw error);
+
     public static AsyncResult<T, TE> RepeatOnError<T, TE>(Func<AsyncResult<T, TE>> func, int repeatCount, TimeSpan waitTime)
         where T : notnull
         where TE : notnull
