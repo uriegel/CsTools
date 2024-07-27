@@ -115,6 +115,46 @@ public static class Memoization
             (a, b) => string.Compare(a, b, caseInsensitive) == 0,
             functionToMemoize, resetter, getIDsAsync);
 
+    public static Func<AsyncResult<T, Exception>> MemoizeAwait<T, TE>(Func<Task<Result<T, Exception>>> functionToMemoize, Resetter? resetter = null)
+        where T : notnull
+        => MemoizeAwait((Result<T, Exception> oldValue) => functionToMemoize(), resetter)!;
+
+    public static Func<AsyncResult<T, Exception>> MemoizeAwait<T, Exception>(Func<Result<T, Exception>, Task<Result<T, Exception>>> functionToMemoize, Resetter? resetter = null)
+        where T : notnull
+        where Exception : notnull
+    {
+        var refCell = new RefCell<(Result<T, Exception> value, bool valid)>();
+        resetter?.SetResetAction(() => refCell.Value.valid = false);
+        var locker = new SemaphoreSlim(1, 1);
+
+        return () => GetValue().ToAsyncResult();
+
+        async Task<Result<T, Exception>> GetValue()
+        { 
+            if (refCell.Value.valid)
+                return refCell.Value.value;
+            else
+            {
+                await locker.WaitAsync(); // Nachfolgende Threads warten hier auf das Release
+                try
+                {
+                    if (refCell.Value.valid)
+                        return refCell.Value.value;
+                    else
+                    {
+                        refCell.Value.value = await functionToMemoize(refCell.Value.value);
+                        refCell.Value.valid = refCell.Value.value.IsError == false;
+                        return refCell.Value.value;
+                    }
+                }
+                finally
+                {
+                    locker.Release(); // Hier (am Besten in einem finally) releasen, damit der nächste Wartende aus dem obigen await raus kommt
+                }
+            }
+        };
+    }
+
     static Func<TKey, Task<TResult?>> MemoizeAsync<TKey, TResult>(ImmutableDictionary<TKey, RefCell<(TResult? value, bool valid)>> cache, 
 		Func<TKey, TKey, bool> comparer,
 		Func<TKey, TResult?, Task<TResult?>> functionToMemoize, Resetter? resetter, Func<Task<TKey[]>>? getIDsAsync) 
