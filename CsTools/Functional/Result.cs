@@ -147,7 +147,7 @@ namespace CsTools.Functional
         T? Ok { get; init; }
         [JsonInclude]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        TE? Error { get; init; }
+        internal TE? Error { get; init; }
     }
 
     public static class ResultExtensions

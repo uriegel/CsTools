@@ -212,6 +212,21 @@ namespace CsTools.Functional
             }
             return RepeatOnError().ToAsyncResult();
         }
+
+        public static AsyncResult<T, TE> RetryOnError<T, TE>(Func<AsyncResult<T, TE>> func, Func<TE, bool> retry)
+            where T : notnull
+            where TE : notnull
+        {
+            async Task<Result<T, TE>> RetryOnError()
+            {
+                var res = await func().ToResult();
+                if (res.IsError && res.Error != null && retry(res.Error))
+                    return await func().ToResult();
+                else
+                    return res;
+            }
+            return RetryOnError().ToAsyncResult();
+        }
     }
 }
 
@@ -222,19 +237,19 @@ namespace CsTools
         public static AsyncResult<T, Exception> TryAwait<T>(Func<Task<T>> func)
             where T : notnull
         {
-            try
+            async Task<Result<T, Exception>> GetResult()
             {
-                async Task<Result<T, Exception>> GetResult()
-                    => Ok<T, Exception>(await func());
+                try
+                {
+                    return Ok<T, Exception>(await func());
+                }
+                catch (Exception e)
+                {
+                    return Error<T, Exception>(e);
+                }
+            }
 
-                return GetResult().ToAsyncResult();
-            }
-            catch (Exception e)
-            {
-                return Error<T, Exception>(e)
-                        .ToAsync()
-                        .ToAsyncResult();
-            }
+            return GetResult().ToAsyncResult();
         }
 
         public static AsyncResult<TR, Exception> TryAwait<TR, T>(Func<T, Task<TR>> func, T t)
@@ -257,19 +272,19 @@ namespace CsTools
             where T : notnull
             where TE : notnull
         {
-            try
+            async Task<Result<T, TE>> GetResult()
             {
-                async Task<Result<T, TE>> GetResult()
-                    => Ok<T, TE>(await func());
+                try
+                {
+                    return Ok<T, TE>(await func());
+                }
+                catch (Exception e)
+                {
+                    return Error<T, TE>(onException(e));
+                }
+            }
 
-                return GetResult().ToAsyncResult();
-            }
-            catch (Exception ex)
-            {
-                return Error<T, TE>(onException(ex))
-                        .ToAsync()
-                        .ToAsyncResult();
-            }
+            return GetResult().ToAsyncResult();
         }
     }
 }
