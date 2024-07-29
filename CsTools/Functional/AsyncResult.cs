@@ -191,7 +191,13 @@ namespace CsTools.Functional
             => (await result
                 .ToResult())
                 .Match(ok => ok, error => throw error);
+    }
+}
 
+namespace CsTools
+{
+    public static partial class Core
+    {
         public static AsyncResult<T, TE> RepeatOnError<T, TE>(Func<AsyncResult<T, TE>> func, int repeatCount, TimeSpan waitTime)
             where T : notnull
             where TE : notnull
@@ -227,13 +233,7 @@ namespace CsTools.Functional
             }
             return RetryOnError().ToAsyncResult();
         }
-    }
-}
 
-namespace CsTools
-{
-    public static partial class Core
-    {
         public static AsyncResult<T, Exception> TryAwait<T>(Func<Task<T>> func)
             where T : notnull
         {
