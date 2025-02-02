@@ -259,5 +259,26 @@ public static class StringExtensions
                 culture, DateTimeStyles.None, out var dt)
             ? dt
             : null;
+
+    /// <summary>
+    /// Gets the extension of a file path, returning null if it doesn't contain one
+    /// </summary>
+    /// <param name="file">The path to the file</param>
+    /// <returns>The extension or null</returns>
+    public static string? GetFileExtension(this string file)
+    {
+        var posStart = file.LastIndexOf('.');
+        return posStart != -1 
+        ? file[posStart..]
+        : null;
+    }
+
+    /// <summary>
+    /// Gets the MIME Type of a file extension, or null, if it could not be determined
+    /// </summary>
+    /// <param name="extension">The file extension, with or without leading '.'</param>
+    /// <returns>null</returns>
+    public static string? ToMimeType(this string extension)
+        => MimeType.Get(extension);
 }            
 

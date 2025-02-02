@@ -12,6 +12,24 @@ using static CsTools.HttpRequest.Core;
 using static CsTools.Core;
 using static CsTools.WithLogging;
 
+var png = MimeType.Get(".png");
+var jpg = MimeType.Get("JPG");
+var jpeg = MimeType.Get("jpeg");
+var what = MimeType.Get("test.html");
+var nil = MimeType.Get("");
+var nil2 = MimeType.Get(null);
+
+var ext = "hello.txt".GetFileExtension();
+ext = ".txt".GetFileExtension();
+ext = "txt".GetFileExtension();
+ext = "hello1.hello2.txt".GetFileExtension();
+
+png = @"c:\path\image.png".ToMimeType();
+png = "image.png".ToMimeType();
+png = ".png".ToMimeType();
+png = "png".ToMimeType();
+png = @"c:\path\image.png".GetFileExtension()?.ToMimeType();
+
 var pw = Password
             .ReadPassword()
             .ReadSecureString();
