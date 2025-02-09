@@ -4,9 +4,9 @@
   <targetFramework>net8.0</targetFramework>
 	<ImplicitUsings>enable</ImplicitUsings>
 	<Nullable>enable</Nullable>
-	<Version>7.19.0</Version>
-	<FileVersion>7.19.0.0</FileVersion>
-	<AssemblyVersion>7.19.0.0</AssemblyVersion>
+	<Version>7.20.0</Version>
+	<FileVersion>7.20.0.0</FileVersion>
+	<AssemblyVersion>7.20.0.0</AssemblyVersion>
 	<Authors>Uwe Riegel</Authors>
 	<Company>Uwe Riegel</Company>		
 	<Description>Tools for C#, mostly functional extensions for .NET Objects</Description>
@@ -15,7 +15,7 @@
 	<PackageProjectUrl>https://github.com/uriegel/CsTools</PackageProjectUrl>
 	<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 	<PackageLicenseFile>LICENSE</PackageLicenseFile>
-	<PackageReleaseNotes>FileExtension from string, MIME type from file extension</PackageReleaseNotes>
+	<PackageReleaseNotes>DualModeTcpListener for Ipv4 or IpV6 dual mode</PackageReleaseNotes>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>		    
     <NoWarn>CS1591</NoWarn>    
