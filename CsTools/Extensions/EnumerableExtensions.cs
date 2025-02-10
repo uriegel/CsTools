@@ -157,7 +157,7 @@ public static class IEnumerableExtensions
     /// <param name="t"></param>
     /// <returns></returns>
     public static IEnumerable<T> Add<T>(this IEnumerable<T> enumerable, T t)
-        => enumerable.Concat(new[] { t });
+        => enumerable.Concat([t]);
 }
 
 public static partial class Core
@@ -175,7 +175,7 @@ public static partial class Core
         static IEnumerable<T> concat(IEnumerable<T> e, IEnumerable<IEnumerable<T>> tail)
         {
             if (!tail.Any())
-                return e ?? Enumerable.Empty<T>();
+                return e ?? [];
             else
                 return e.Concat(concat(tail.FirstOrDefault()!, tail.Where((n, i) => i > 0)));
         }

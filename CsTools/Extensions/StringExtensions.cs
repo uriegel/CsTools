@@ -11,10 +11,10 @@ public static class StringExtensions
     /// <param name="str"></param>
     /// <param name="startChar"></param>
     /// <returns></returns>
-    public static string SubstringAfter(this string? str, char startChar)
+    public static string SubstringAfter(this string str, char startChar)
     {
-        var posStart = str?.IndexOf(startChar) + 1 ?? -1;
-        return posStart != -1 && posStart < str!.Length - 1
+        var posStart = str.IndexOf(startChar) + 1;
+        return posStart != 0 && posStart < str.Length
         ? str[posStart..]
         : "";
     }
@@ -25,10 +25,10 @@ public static class StringExtensions
     /// <param name="str"></param>
     /// <param name="startStr"></param>
     /// <returns></returns>
-    public static string SubstringAfter(this string? str, string startStr)
+    public static string SubstringAfter(this string str, string startStr)
     {
-        var posStart = str?.IndexOf(startStr) + startStr.Length ?? -1;
-        return posStart != -1 && posStart < str!.Length - 1
+        var posStart = str.IndexOf(startStr) + startStr.Length;
+        return posStart != startStr.Length - 1 && posStart < str.Length
         ? str[posStart..]
         : "";
     }
@@ -39,10 +39,10 @@ public static class StringExtensions
     /// <param name="str"></param>
     /// <param name="lastStartChar"></param>
     /// <returns></returns>
-    public static string SubstringAfterLast(this string? str, char lastStartChar)
+    public static string SubstringAfterLast(this string str, char lastStartChar)
     {
-        var posStart = str?.LastIndexOf(lastStartChar) + 1 ?? -1;
-        return posStart != -1 && posStart < str!.Length - 1
+        var posStart = str.LastIndexOf(lastStartChar) + 1;
+        return posStart != 0 && posStart < str.Length
         ? str[posStart..]
         : "";
     }
@@ -53,10 +53,10 @@ public static class StringExtensions
     /// <param name="str"></param>
     /// <param name="lastStartStr"></param>
     /// <returns></returns>
-    public static string SubstringAfterLast(this string? str, string lastStartStr)
+    public static string SubstringAfterLast(this string str, string lastStartStr)
     {
-        var posStart = str?.LastIndexOf(lastStartStr) + lastStartStr.Length ?? -1;
-        return posStart != -1 && posStart < str!.Length - 1
+        var posStart = str.LastIndexOf(lastStartStr) + lastStartStr.Length;
+        return posStart != lastStartStr.Length - 1 && posStart < str.Length
         ? str[posStart..]
         : "";
     }
@@ -67,10 +67,10 @@ public static class StringExtensions
     /// <param name="str"></param>
     /// <param name="endChar"></param>
     /// <returns></returns>
-    public static string SubstringUntil(this string? str, char endChar)
+    public static string SubstringUntil(this string str, char endChar)
     {
-        var posEnd = str?.IndexOf(endChar) ?? 0;
-        return posEnd > 0
+        var posEnd = str.IndexOf(endChar);
+        return posEnd >= 0
         ? str![..posEnd]
         : str ?? "";
     }
@@ -81,10 +81,10 @@ public static class StringExtensions
     /// <param name="str"></param>
     /// <param name="endStr"></param>
     /// <returns></returns>
-    public static string SubstringUntil(this string? str, string endStr)
+    public static string SubstringUntil(this string str, string endStr)
     {
-        var posEnd = str?.IndexOf(endStr) ?? 0;
-        return posEnd > 0
+        var posEnd = str.IndexOf(endStr);
+        return posEnd >= 0
         ? str![..posEnd]
         : str ?? "";
     }
@@ -95,10 +95,10 @@ public static class StringExtensions
     /// <param name="str"></param>
     /// <param name="lastEndChar"></param>
     /// <returns></returns>
-    public static string SubstringUntilLast(this string? str, char lastEndChar)
+    public static string SubstringUntilLast(this string str, char lastEndChar)
     {
-        var posEnd = str?.LastIndexOf(lastEndChar) ?? 0;
-        return posEnd > 0
+        var posEnd = str.LastIndexOf(lastEndChar);
+        return posEnd >= 0
         ? str![..posEnd]
         : str ?? "";
     }
@@ -109,10 +109,10 @@ public static class StringExtensions
     /// <param name="str"></param>
     /// <param name="lastEndStr"></param>
     /// <returns></returns>
-    public static string SubstringUntilLast(this string? str, string lastEndStr)
+    public static string SubstringUntilLast(this string str, string lastEndStr)
     {
-        var posEnd = str?.LastIndexOf(lastEndStr) ?? 0;
-        return posEnd > 0
+        var posEnd = str.LastIndexOf(lastEndStr);
+        return posEnd >= 0
         ? str![..posEnd]
         : str ?? "";
     }
@@ -124,11 +124,10 @@ public static class StringExtensions
     /// <param name="startChar"></param>
     /// <param name="endChar"></param>
     /// <returns></returns>
-    public static string StringBetween(this string? str, char startChar, char endChar)
+    public static string StringBetween(this string str, char startChar, char endChar)
         => str
-                ?.SubstringAfter(startChar)
-                ?.SubstringUntil(endChar)
-                ?? "";
+            .SubstringAfter(startChar)
+            .SubstringUntil(endChar);
 
     /// <summary>
     /// Combination of 'SubstringAfter' and 'SubstringUntil', returning a substring embedded between 'startStr and 'endStr'
@@ -137,11 +136,10 @@ public static class StringExtensions
     /// <param name="startStr"></param>
     /// <param name="endStr"></param>
     /// <returns></returns>
-    public static string StringBetween(this string? str, string startStr, string endStr)
+    public static string StringBetween(this string str, string startStr, string endStr)
         => str
-                ?.SubstringAfter(startStr)
-                ?.SubstringUntil(endStr)
-                ?? "";
+            .SubstringAfter(startStr)
+            .SubstringUntil(endStr);
 
     /// <summary>
     /// Parses a string to get an int value, returning None if parsing is not possible

@@ -30,6 +30,33 @@ png = ".png".ToMimeType();
 png = "png".ToMimeType();
 png = @"c:\path\image.png".GetFileExtension()?.ToMimeType();
 
+
+var testurl = "htt?p://test?param=2";
+var query = testurl.SubstringAfterLast("?p");
+testurl = "http://test?p";
+query = testurl.SubstringAfterLast("?p");
+testurl = "?p://test";
+query = testurl.SubstringAfterLast("?p");
+testurl = "http://test";
+query = testurl.SubstringAfterLast("?p");
+testurl = "";
+query = testurl.SubstringAfterLast("?p");
+testurl = "?";
+query = testurl.SubstringAfterLast("?p");
+
+testurl = "htt?p://test?param=2";
+query = testurl.SubstringUntilLast("?");
+testurl = "http:?//test?";
+query = testurl.SubstringUntilLast("?");
+testurl = "?p://test";
+query = testurl.SubstringUntilLast("?");
+testurl = "http://test";
+query = testurl.SubstringUntilLast("?");
+testurl = "";
+query = testurl.SubstringUntilLast("?");
+testurl = "?p";
+query = testurl.SubstringUntilLast("?");
+
 var pw = Password
             .ReadPassword()
             .ReadSecureString();
