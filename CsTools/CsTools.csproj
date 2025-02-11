@@ -4,9 +4,9 @@
   <targetFramework>net8.0</targetFramework>
 	<ImplicitUsings>enable</ImplicitUsings>
 	<Nullable>enable</Nullable>
-	<Version>7.21.0</Version>
-	<FileVersion>7.21.0.0</FileVersion>
-	<AssemblyVersion>7.21.0.0</AssemblyVersion>
+	<Version>7.22.0</Version>
+	<FileVersion>7.22.0.0</FileVersion>
+	<AssemblyVersion>7.22.0.0</AssemblyVersion>
 	<Authors>Uwe Riegel</Authors>
 	<Company>Uwe Riegel</Company>		
 	<Description>Tools for C#, mostly functional extensions for .NET Objects</Description>
@@ -15,7 +15,7 @@
 	<PackageProjectUrl>https://github.com/uriegel/CsTools</PackageProjectUrl>
 	<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 	<PackageLicenseFile>LICENSE</PackageLicenseFile>
-	<PackageReleaseNotes>SubStringAfter and SubStringUtil and StringBetween now olny for strings != null! Nullable chaeck has to be done before calling these funcktions (?. operator)</PackageReleaseNotes>
+	<PackageReleaseNotes>StreamBase as base for custom Stream implementations</PackageReleaseNotes>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>		    
     <NoWarn>CS1591</NoWarn>    
