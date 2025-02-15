@@ -15,7 +15,7 @@
 	<PackageProjectUrl>https://github.com/uriegel/CsTools</PackageProjectUrl>
 	<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 	<PackageLicenseFile>LICENSE</PackageLicenseFile>
-	<PackageReleaseNotes>SubStringAfter and SubStringUtil and StringBetween now olny for strings != null! Nullable chaeck has to be done before calling these funcktions (?. operator)</PackageReleaseNotes>
+	<PackageReleaseNotes>Applicative extensions</PackageReleaseNotes>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>		    
     <NoWarn>CS1591</NoWarn>    
