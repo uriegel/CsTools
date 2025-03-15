@@ -15,7 +15,7 @@
 	<PackageProjectUrl>https://github.com/uriegel/CsTools</PackageProjectUrl>
 	<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 	<PackageLicenseFile>LICENSE</PackageLicenseFile>
-	<PackageReleaseNotes>IEnumerable.Windowed returns now IEnumerable<IEnumerable></PackageReleaseNotes>
+	<PackageReleaseNotes>IEnumerable.Windowed returns now IEnumerable (IEnumerable)</PackageReleaseNotes>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>		    
     <NoWarn>CS1591</NoWarn>    
