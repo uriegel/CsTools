@@ -78,25 +78,30 @@ public static class IEnumerableExtensions
     }
 
     /// <summary>
-    /// Transform a enumerable to an Enumerable with an array of fixed size of items
+    /// Transform a enumerable to an Enumerable with an Enumerable of fixed size of items
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="source"></param>
-    /// <param name="count">Size of Array</param>
+    /// <param name="count">Size of returning Enumerables</param>
     /// <returns></returns>
-    public static IEnumerable<T[]> Windowed<T>(this IEnumerable<T> source, int count)
+    public static IEnumerable<IEnumerable<T>> Windowed<T>(this IEnumerable<T> source, int count)
     {
 
         var enumerator = source.GetEnumerator();
+        var consumed = false;
         IEnumerable<T> getWindowed()
         {
+            consumed = false;
             var index = 0;
             while (true)
             {
                 if (index++ < count)
                 {
                     if (!enumerator.MoveNext())
+                    {
+                        consumed = true;
                         yield break;
+                    }
                     var current = enumerator.Current;
                     yield return current;
                 }
@@ -107,8 +112,8 @@ public static class IEnumerableExtensions
 
         while (true)
         {
-            var res = getWindowed().ToArray();
-            if (res.Length > 0)
+            var res = getWindowed();
+            if (!consumed)
                 yield return res;
             else
                 yield break;
