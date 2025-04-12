@@ -29,7 +29,8 @@ public static class Directory
     public static string EnsureFileDirectoryExists(this string file)
     {
         var info = new FileInfo(file);
-        EnsureDirectoryExists(info.FullName);
+        if (info.Directory?.FullName != null)
+            info.Directory.FullName.EnsureDirectoryExists();
         return file;
     }
 
