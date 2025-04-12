@@ -15,11 +15,23 @@ public static class Directory
     /// Ensures, that the given directory path exists, otherwise it creates the directory
     /// </summary>
     /// <param name="path"></param>
-    /// <returns></returns>
+    /// <returns>path for chaining</returns>
     public static string EnsureDirectoryExists(this string path)
         => System.IO.Directory.Exists(path)
             ? path
             : path.SideEffect(p => System.IO.Directory.CreateDirectory(p));
+
+    /// <summary>
+    /// Ensures, that the given file's directory path exists, otherwise it creates the directory
+    /// </summary>
+    /// <param name="file"></param>
+    /// <returns>file for chaining</returns>
+    public static string EnsureFileDirectoryExists(this string file)
+    {
+        var info = new FileInfo(file);
+        EnsureDirectoryExists(info.FullName);
+        return file;
+    }
 
     /// <summary>
     /// Checks if the given directory path exists, otherwise it creates the directory
@@ -50,7 +62,7 @@ public static class Directory
         {
             return Error<string, DirectoryError>(DirectoryError.NotSupported);
         }
-        catch 
+        catch
         {
             return Error<string, DirectoryError>(DirectoryError.Unknown);
         }
