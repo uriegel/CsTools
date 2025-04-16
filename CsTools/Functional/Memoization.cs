@@ -239,7 +239,7 @@ public static class Memoization
                     }
 
                     var refcell = new RefCell<(TResult? value, bool)>((ids?.Any(n => comparer(n, id)) ?? true
-                        ? functionToMemoize(id, cache.GetValue(id)?.Value.value)
+                        ? functionToMemoize(id, cacheDictionary.GetValue(id)?.Value.value)
                         : default, true));
 
                     cacheDictionary = cacheDictionary.SetItem(id, refcell!);
