@@ -130,7 +130,7 @@ public class JsonRequest(string baseUrl)
 
 public record RequestType<T>(string Method, T Payload);
 
-public enum CustomRequestError 
+public enum CustomRequestError
 {
     Unknown = 1000,
     ConnectionError,
@@ -139,6 +139,7 @@ public enum CustomRequestError
     /// The response ended prematurely.
     /// </summary>
     ResponseEnded,
+    TaskCanceled
 }
 
 public record RequestError(
