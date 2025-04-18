@@ -25,6 +25,10 @@ public static class HttpResponseMessageExtensions
             {
                 return Error<HttpResponseMessage, RequestError>(RequestError.Custom(CustomRequestError.ResponseEnded, hie.Message));
             }
+            catch (TaskCanceledException te)
+            {
+                return Error<HttpResponseMessage, RequestError>(RequestError.Custom(CustomRequestError.TaskCanceled, te.Message));
+            }
             catch (Exception e)
             {
                 return Error<HttpResponseMessage, RequestError>(RequestError.Custom(CustomRequestError.Unknown, e.Message));

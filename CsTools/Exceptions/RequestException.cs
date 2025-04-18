@@ -1,6 +1,6 @@
 using CsTools.HttpRequest;
 
-class RequestException : Exception
+public class RequestException : Exception
 {
     public CustomRequestError? CustomRequestError { get; }
     public RequestError RequestError { get; }
