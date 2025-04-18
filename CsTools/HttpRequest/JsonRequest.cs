@@ -135,15 +135,24 @@ public enum CustomRequestError
     Unknown = 1000,
     ConnectionError,
     NameResolutionError,
+    /// <summary>
+    /// The response ended prematurely.
+    /// </summary>
     ResponseEnded,
 }
 
 public record RequestError(
     int Status,
     string StatusText
-) {
+)
+{
     public static RequestError Custom(CustomRequestError error, string message)
         => new((int)error, message);
     public static RequestError Custom(HttpStatusCode httpStatus, string message)
         => new((int)CustomRequestError.Unknown + (int)httpStatus, message);
+
+    public CustomRequestError? GetCustomRequestError()
+        => Status >= 1000 && Status < 2000
+            ? (CustomRequestError)Status
+            : null;
 }
