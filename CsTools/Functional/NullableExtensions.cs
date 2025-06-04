@@ -7,4 +7,13 @@ public static class NullableExtensions
             ? someFunc(t)
             : noneFunc();
 
+    public static T GetOrDefault<T>(this T? t, T defaultValue)
+        where T : class
+        => t ?? defaultValue;
+
+    public static T GetOrDefault<T>(this T? t, T defaultValue)
+        where T : struct
+        => t.HasValue
+            ? t.Value
+            : defaultValue;
 }
