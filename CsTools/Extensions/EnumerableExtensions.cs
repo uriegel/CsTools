@@ -155,6 +155,21 @@ public static class IEnumerableExtensions
             .Where(n => n != null) as IEnumerable<TResult>)!;
 
     /// <summary>
+    /// A combination of select and where to simultaneously filter and convert using a selector that can return null. 
+    /// Filtering and converting at the same time. The result does not contain null values.
+    /// </summary>
+    /// <typeparam name="TSource"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="source"></param>
+    /// <param name="selector">Filters by result == null and converts from type TSource to type TResult</param>
+    /// <returns>Result-Enumerable</returns>
+    public static IEnumerable<TResult> SelectFilterNull<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult?> selector)
+        where TResult : class
+        => (source
+            .Select(selector)
+            .Where(n => n != null) as IEnumerable<TResult>)!;
+
+    /// <summary>
     /// Adds an item to an enumerable
     /// </summary>
     /// <typeparam name="T"></typeparam>
