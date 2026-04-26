@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 <PropertyGroup>
-  <targetFramework>net8.0</targetFramework>
+  <targetFramework>net10.0</targetFramework>
 	<ImplicitUsings>enable</ImplicitUsings>
 	<Nullable>enable</Nullable>
-	<Version>7.25.8</Version>
-	<FileVersion>7.25.8.0</FileVersion>
-	<AssemblyVersion>7.25.8.0</AssemblyVersion>
+	<Version>8.0.0</Version>
+	<FileVersion>8.0.0.0</FileVersion>
+	<AssemblyVersion>8.0.0.0</AssemblyVersion>
 	<Authors>Uwe Riegel</Authors>
 	<Company>Uwe Riegel</Company>		
 	<Description>Tools for C#, mostly functional extensions for .NET Objects</Description>
@@ -15,7 +15,7 @@
 	<PackageProjectUrl>https://github.com/uriegel/CsTools</PackageProjectUrl>
 	<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 	<PackageLicenseFile>LICENSE</PackageLicenseFile>
-	<PackageReleaseNotes>Namespace change for ProgressStreamExtensions</PackageReleaseNotes>
+	<PackageReleaseNotes>.NET 10</PackageReleaseNotes>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>		    
     <NoWarn>CS1591</NoWarn>    
@@ -34,7 +34,7 @@
 </ItemGroup>
 
 <ItemGroup>
-  <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+  <PackageReference Include="System.Linq.Async" Version="7.0.1" />
 </ItemGroup>
 
 </Project>
