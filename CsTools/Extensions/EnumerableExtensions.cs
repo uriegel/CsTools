@@ -1,7 +1,7 @@
 namespace CsTools.Extensions;
 
 /// <summary>
-/// Extension class for <see cref="System.Collections.Generic.IEnumerable{T}"/>
+/// Extension class for <see cref="IEnumerable{T}"/>
 /// </summary>
 public static class IEnumerableExtensions
 {
@@ -178,6 +178,17 @@ public static class IEnumerableExtensions
     /// <returns></returns>
     public static IEnumerable<T> Add<T>(this IEnumerable<T> enumerable, T t)
         => enumerable.Concat([t]);
+
+    /// <summary>
+    /// Wraps an <see cref="IEnumerable{T}"/> and returns an enumerable which 
+    /// disposes all contained elements     
+    /// </summary>
+    /// <typeparam name="T">Arbitrary type which is disposable</typeparam>
+    /// <param name="enumerable">An enumerable containing items which are all disposable and should be disposed</param>
+    /// <returns></returns>
+    public static DisposableEnumerable<T> AsDisposable<T>(this IEnumerable<T> enumerable)
+        where T : IDisposable
+        => new(enumerable);
 }
 
 public static partial class Core
