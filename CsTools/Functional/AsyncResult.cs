@@ -186,16 +186,6 @@ namespace CsTools.Functional
             return new(SideEffect());
         }
 
-        public static async Task<T> HttpGetOrThrowAsync<T, TE>(this AsyncResult<T, TE> result)
-            where T : notnull
-            where TE : RequestError
-            => (await result
-                .ToResult())
-                .SelectError(e => e.GetCustomRequestError() != CustomRequestError.TaskCanceled
-                    ? new RequestException(e) as Exception
-                    : new TaskCanceledException(e.StatusText))
-                .Match(ok => ok, error => throw error);
-
         public static async Task<T> GetOrThrowAsync<T, TE>(this AsyncResult<T, TE> result)
             where T : notnull
             where TE : Exception
