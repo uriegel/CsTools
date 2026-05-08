@@ -2,7 +2,6 @@
 using CsTools.Extensions;
 using CsTools.HttpRequest;
 using CsTools.Functional;
-using System.Text.Json;
 using System.Net.Http.Json;
 
 using static System.Console;
@@ -67,14 +66,14 @@ home = GetEnvironmentVariable("HOME");
 
 try
 {
-    using var msg = await Request.RunAsync(DefaultSettings with
+    using var mesg = await Request.RunAsync(DefaultSettings with
     {
         Method = HttpMethod.Get,
         BaseUrl = "http://192.168.178.74:8080",
         //BaseUrl = "https://timio.caseris9.de",
         Url = "/getfiles"
     }, true);
-    var test = await msg.Content.ReadAsStringAsync();
+    var tst = await mesg.Content.ReadAsStringAsync();
 }
 catch (RequestException hre)
 {
@@ -88,8 +87,41 @@ catch (HttpException he)
 try
 {
     var jsonGetRequest = new JsonRequest("http://192.168.178.74:8080");
-    var result = await jsonGetRequest.GetAsync<FileType[]>("getfiles");
-    var test = "0";
+    var rs = await jsonGetRequest.GetAsync<FileType[]>("getfiles");
+}
+catch (HttpException he)
+{
+    Console.Error.WriteLine($"HTTP error: {he}");
+}
+
+try
+{
+    await Request.RunAsync(PostCreateDirectory("/storage/emulated/0/Music/Neuer Ordner"), true);
+
+    static Settings PostCreateDirectory(string path)
+        => DefaultSettings with
+        {
+            Method = HttpMethod.Post,
+            BaseUrl = $"http://192.168.178.74:8080",
+            Url = $"/createdirectory{path}"
+        };
+}
+catch (HttpException he)
+{
+    Console.Error.WriteLine($"HTTP error: {he}");
+}
+
+try
+{
+    await Request.RunAsync(DeleteFile("/storage/emulated/0/Music/Neuer Ordner"), true);
+
+    static Settings DeleteFile(string path) 
+        => DefaultSettings with
+        {
+            Method = HttpMethod.Delete,
+            BaseUrl = $"http://192.168.178.74:8080",
+            Url = $"/deletefile/{path}"
+        };
 }
 catch (HttpException he)
 {
@@ -196,44 +228,44 @@ Settings PostFile(Stream streamToPost, DateTime lastWriteTime)
 //     .SideEffectWhenError(e => WriteLine($"Request error: {e}"))
 //     .ToResult();
 
-// ReadLine();
+ReadLine();
 
-// var pipeRes = 
-//     2
-//         .Pipe(n => n + 8)
-//         .Pipe(n => n / 2)
-//         .Pipe(n => n.ToString())
-//         .Pipe(s => "Das Ergebnis: " + s);
+var pipeRes = 
+    2
+        .Pipe(n => n + 8)
+        .Pipe(n => n / 2)
+        .Pipe(n => n.ToString())
+        .Pipe(s => "Das Ergebnis: " + s);
 
-// var t = 7.And(
-//     n => n < 16,
-//     n => n % 2 == 1,
-//     n => n > 4);
+var t = 7.And(
+    n => n < 16,
+    n => n % 2 == 1,
+    n => n > 4);
 
-// t = 4.And(
-//     n => n < 16,
-//     n => n % 2 == 1,
-//     n => n > 4);
+t = 4.And(
+    n => n < 16,
+    n => n % 2 == 1,
+    n => n > 4);
 
-// t = 3.And(
-//     n => n < 16,
-//     n => n % 2 == 1,
-//     n => n > 4);
+t = 3.And(
+    n => n < 16,
+    n => n % 2 == 1,
+    n => n > 4);
 
-// var resOk = Ok<string, int>("Das ist das Gute");
-// var resErr = Error<string, int>(9876);
+var resOk = Ok<string, int>("Das ist das Gute");
+var resErr = Error<string, int>(9876);
 
-// Result<ResultType, string> Transform(Result<string, int> input)
-//     => input
-//         .SelectError(err => $"Error occurred: {err}")
-//         .Select(ok => new ResultType(ok, 999));
+Result<ResultType, string> Transform(Result<string, int> input)
+    => input
+        .SelectError(err => $"Error occurred: {err}")
+        .Select(ok => new ResultType(ok, 999));
 
-// Transform(resOk).Match(
-//     ok => WriteLine($"Ok: {ok}"),
-//     err => WriteLine($"Err: {err}"));
-// Transform(resErr).Match(
-//     ok => WriteLine($"Ok: {ok}"),
-//     err => WriteLine($"Err: {err}"));
+Transform(resOk).Match(
+    ok => WriteLine($"Ok: {ok}"),
+    err => WriteLine($"Err: {err}"));
+Transform(resErr).Match(
+    ok => WriteLine($"Ok: {ok}"),
+    err => WriteLine($"Err: {err}"));
 
 // var jsonRequest = new JsonRequest("http://localhost:2000/requests");
 // var res = await jsonRequest
@@ -279,135 +311,130 @@ Settings PostFile(Stream streamToPost, DateTime lastWriteTime)
 //         ok => WriteLine($"Ok {text}: {ok}"),
 //         err => WriteLine($"Error {text}: {err.Status} {err.StatusText}"));
 
-// ReadLine();
+ReadLine();
 
-// sse1.Dispose();
-// sse2.Dispose();
+int Divide(int a, int d)
+    => a / d;
 
-// ReadLine();
+home = CsTools.Directory.GetHomeDir();
+var docs = CsTools.Directory.GetDocumentsDir();
 
-// int Divide(int a, int d)
-//     => a / d;
+var dict = new Dictionary<string, int>
+    {
+        { "111", 1 },
+        { "112", 1234 },
+        { "113", 4321 }
+    };
 
-// home = CsTools.Directory.GetHomeDir();
-// var docs = CsTools.Directory.GetDocumentsDir();
+var val = dict.TryGetValue("112");
+var val2 = dict.TryGetValue("115");
 
-// var dict = new Dictionary<string, int>
-//     {
-//         { "111", 1 },
-//         { "112", 1234 },
-//         { "113", 4321 }
-//     };
+var dict2 = new Dictionary<int, string>
+    {
+        { 111, "1" },
+        { 112, "1234" },
+        { 113, "4321" }
+    };
 
-// var val = dict.TryGetValue("112");
-// var val2 = dict.TryGetValue("115");
+var val3= dict2.GetValue(112);
+var val4 = dict2.GetValue(115);
 
-// var dict2 = new Dictionary<int, string>
-//     {
-//         { 111, "1" },
-//         { 112, "1234" },
-//         { 113, "4321" }
-//     };
+#pragma warning disable 1998
+async Task<int> MakeAsync(Func<int> syncFunc)
+    => syncFunc();
 
-// var val3= dict2.GetValue(112);
-// var val4 = dict2.GetValue(115);
+var testOk = await MakeAsync(() => Divide(16, 4))
+                    .Catch(e => 0.SideEffect(_ => Console.WriteLine($"catched: {e}")));    
 
-// #pragma warning disable 1998
-// async Task<int> MakeAsync(Func<int> syncFunc)
-//     => syncFunc();
+var testE = await MakeAsync(() => Divide(16, 0))
+                    .Catch(e => 0.SideEffect(_ => Console.WriteLine($"catched: {e}")));    
 
-// var testOk = await MakeAsync(() => Divide(16, 4))
-//                     .Catch(e => 0.SideEffect(_ => Console.WriteLine($"catched: {e}")));    
+var test = new[] { "iexplore.exe", "de-DE", "en-US", "ieinstal.exe" }
+            .FlattenTree(Resolver, CreateFileItem, IsSubtree, null, AppendPath, @"C:\Program Files\Internet Explorer");
 
-// var testE = await MakeAsync(() => Divide(16, 0))
-//                     .Catch(e => 0.SideEffect(_ => Console.WriteLine($"catched: {e}")));    
+bool IsSubtree(string path, string? subPath)
+    => (File.GetAttributes(subPath.AppendPath(path)) & FileAttributes.Directory) == FileAttributes.Directory;
 
-// var test = new[] { "iexplore.exe", "de-DE", "en-US", "ieinstal.exe" }
-//             .FlattenTree(Resolver, CreateFileItem, IsSubtree, null, AppendPath, @"C:\Program Files\Internet Explorer");
+(IEnumerable<string>, string?) Resolver(string item, string? subPath)
+{
+    var path = subPath?.AppendPath(item) ?? item;
+    var dirItems = GetSafe(() => new DirectoryInfo(path).GetDirectories().Select(n => n.Name));
+    var fileItems = GetSafe(() => new DirectoryInfo(path).GetFiles().Select(n => n.Name));
+    var all = fileItems.Concat(dirItems);
+    return (all, item);
+}
 
-// bool IsSubtree(string path, string? subPath)
-//     => (File.GetAttributes(subPath.AppendPath(path)) & FileAttributes.Directory) == FileAttributes.Directory;
+IEnumerable<string> GetSafe(Func<IEnumerable<string>> func)
+{
+    try 
+    {
+        return func();
+    }   
+    catch 
+    {
+        return Enumerable.Empty<string>();
+    }
+}
 
-// (IEnumerable<string>, string?) Resolver(string item, string? subPath)
-// {
-//     var path = subPath?.AppendPath(item) ?? item;
-//     var dirItems = GetSafe(() => new DirectoryInfo(path).GetDirectories().Select(n => n.Name));
-//     var fileItems = GetSafe(() => new DirectoryInfo(path).GetFiles().Select(n => n.Name));
-//     var all = fileItems.Concat(dirItems);
-//     return (all, item);
-// }
+string AppendPath(string? initialPath, string? subPath)
+    => initialPath.AppendPath(subPath);
 
-// IEnumerable<string> GetSafe(Func<IEnumerable<string>> func)
-// {
-//     try 
-//     {
-//         return func();
-//     }   
-//     catch 
-//     {
-//         return Enumerable.Empty<string>();
-//     }
-// }
+FileItem CreateFileItem(string path, string? subPath)
+{
+    var info = new FileInfo(subPath!.AppendPath(path));
+    return new(info.FullName, info.Length);
+}
 
-// string AppendPath(string? initialPath, string? subPath)
-//     => initialPath.AppendPath(subPath);
+var test2 = new[] { @"C:\Users\urieg\Neu" }
+            .FlattenTree(Resolver, CreateFileItem, IsSubtree, null, AppendPath, (string?)null);
 
-// FileItem CreateFileItem(string path, string? subPath)
-// {
-//     var info = new FileInfo(subPath!.AppendPath(path));
-//     return new(info.FullName, info.Length);
-// }
-
-// var test2 = new[] { @"C:\Users\urieg\Neu" }
-//             .FlattenTree(Resolver, CreateFileItem, IsSubtree, null, AppendPath, (string?)null);
-
-// var cts = new CancellationTokenSource(1200);
-// var test3 = new[] { @"C:\windows\system32" }
-//             .FlattenTree(Resolver, CreateFileItem, IsSubtree, cts.Token, AppendPath, (string?)null);
+var cts = new CancellationTokenSource(1200);
+var test3 = new[] { @"C:\windows\system32" }
+            .FlattenTree(Resolver, CreateFileItem, IsSubtree, cts.Token, AppendPath, (string?)null);
 
 
-// var test4 = new[] { @"C:\windows\system32" }
-//             .FlattenTree(Resolver, CreateFileItem, IsSubtree, null, AppendPath, (string?)null);
+var test4 = new[] { @"C:\windows\system32" }
+            .FlattenTree(Resolver, CreateFileItem, IsSubtree, null, AppendPath, (string?)null);
 
-// using var stream = Resources.Get("text/README");
-// using var file = File.Create("./test.md");
-// stream?.CopyTo(file);
+using var stream = Resources.Get("text/README");
+using var file = File.Create("./test.md");
+stream?.CopyTo(file);
 
-// var result = await RunAsync("lsblk", "--bytes --output SIZE,NAME,LABEL,MOUNTPOINT,FSTYPE");
-// result = await RunAsync("lsblk", "--nothing -bytes -output SIZE,NAME,LABEL,MOUNTPOINT,FSTYPE")
-//             .Catch(e => e.ToString());
-// result = await RunAsync("lsblk", "--bytes --output SIZE,NAME,LABEL,MOUNTPOINT,FSTYPE");
+var result = await RunAsync("lsblk", "--bytes --output SIZE,NAME,LABEL,MOUNTPOINT,FSTYPE");
+result = await RunAsync("lsblk", "--nothing -bytes -output SIZE,NAME,LABEL,MOUNTPOINT,FSTYPE")
+            .Catch(e => e.ToString());
+result = await RunAsync("lsblk", "--bytes --output SIZE,NAME,LABEL,MOUNTPOINT,FSTYPE");
 
-// using var testerFile = new ProgressStream(
-//     File.OpenRead(Environment.CurrentDirectory.AppendPath(@"Tester/bin/Debug/net6.0/Tester")), 
-//     (total, current) => Console.WriteLine($"Total: {total}, current: {current}"));
-// using var testerCopy = File.Create(Environment.CurrentDirectory.AppendPath(@"TesterCopy"));
-// testerFile.CopyTo(testerCopy);
+using var testerFile = new ProgressStream(
+    File.OpenRead(Environment.CurrentDirectory.AppendPath(@"Tester/bin/Debug/net6.0/Tester")), 
+    (total, current) => Console.WriteLine($"Total: {total}, current: {current}"));
+using var testerCopy = File.Create(Environment.CurrentDirectory.AppendPath(@"TesterCopy"));
+testerFile.CopyTo(testerCopy);
 
-// using var msg = await Request.RunAsync(DefaultSettings with
-//     {
-//         Method = HttpMethod.Post,
-//         BaseUrl = $"http://192.168.178.74:8080",
-//         Url = "/getfile",
-//         AddContent = () => JsonContent.Create(new { Path = "/DCIM/Camera/20230210_170241.mp4" })
-//     }, true);
-// using var targetFile = File.Create("/home/uwe/test.mp4")
-//     .WithProgress((t, c) => Console.WriteLine($"{c}, {msg.Content.Headers.ContentLength}"));
+using var msg = await Request.RunAsync(DefaultSettings with
+    {
+        Method = HttpMethod.Post,
+        BaseUrl = $"http://192.168.178.74:8080",
+        Url = "/getfile",
+        AddContent = () => JsonContent.Create(new { Path = "/DCIM/Camera/20230210_170241.mp4" })
+    }, true);
+using var targetFile = File.Create("/home/uwe/test.mp4")
+    .WithProgress((t, c) => WriteLine($"{c}, {msg.Content.Headers.ContentLength}"));
 
-// await msg 
-//     .Content
-//     .ReadAsStream()
-//     .CopyToAsync(targetFile);
+await msg 
+    .Content
+    .ReadAsStream()
+    .CopyToAsync(targetFile);
 
-// ReadLine();
+ReadLine();
 
-// record FileItem(string Path, long Size);
+record FileItem(string Path, long Size);
 
 record FileType(string Name, bool IsDirectory, long Size, bool IsHidden, long Time);
 
-// record Request2(string Name, int Id);
-// record RequestWrong(string NoName, bool Id);
-// record ResultType(string Result, int Id);
-// record WrongResultType(string NoResult, DateTime Id);
+record Request2(string Name, int Id);
+record RequestWrong(string NoName, bool Id);
+record ResultType(string Result, int Id);
+record WrongResultType(string NoResult, DateTime Id);
 
-// record Event(string Content);
+record Event(string Content);

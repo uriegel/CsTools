@@ -65,81 +65,30 @@ public static class Request
                 Exception e => new HttpException(e.Message, e)
             });
 
-    // public static AsyncResult<HttpResponseMessage, RequestError> Run(Settings settings)
-    //     => ResultAsync(settings, false)
-    //         .ToAsyncResult();
+    /// <summary>
+    /// Gets the response stream as LengthStream with content length
+    /// </summary>
+    /// <param name="msg"></param>
+    /// <returns></returns>
+    public static Stream GetResponseStream(this HttpResponseMessage msg)
+        => msg
+            .Content
+            .ReadAsStream()
+            .WithLength(msg.Content.Headers.ContentLength ?? 0);
 
-    // public static AsyncResult<HttpResponseMessage, RequestError> Run(Settings settings, bool onlyHeaders)
-    //     => ResultAsync(settings, onlyHeaders)
-    //         .ToAsyncResult();
+    public static string? GetHeaderValue(this HttpResponseMessage msg, string name)
+        => msg.Headers.TryGetValues(name, out var res)
+        ? res.First()
+        : msg.Content.Headers.TryGetValues(name, out var contentRes)
+            ? contentRes.First()
+            : null;
 
-    // async static Task<Result<HttpResponseMessage, RequestError>> ResultAsync(Settings settings, bool onlyHeaders)
-    // {
-    //     try 
-    //     {
-    //         var msg = await RawRunAsync(settings, onlyHeaders);
-    //         return Ok<HttpResponseMessage, RequestError>(msg);
-    //     }
-    //     catch (HttpException he) when (he.InnerException is System.Net.Http.HttpRequestException hre 
-    //             && hre.HttpRequestError == HttpRequestError.ConnectionError)
-    //     {
-    //         return Error<HttpResponseMessage, RequestError>(RequestError.Custom(CustomRequestError.ConnectionError, hre.Message));
-    //     }
-    //     catch (HttpException he) when 
-    //         (he.InnerException is System.Net.Http.HttpRequestException hre 
-    //             && hre.HttpRequestError == HttpRequestError.NameResolutionError)
-    //     {
-    //         return Error<HttpResponseMessage, RequestError>(RequestError.Custom(CustomRequestError.NameResolutionError, hre.Message));
-    //     }
-    //     catch (HttpException he) when (he.InnerException is HttpRequestException hre) 
-    //     {
-    //         return Error<HttpResponseMessage, RequestError>(RequestError.Custom(hre.Code, hre.Message));
-    //     }
-    //     catch (TaskCanceledException te)
-    //     {
-    //         return Error<HttpResponseMessage, RequestError>(RequestError.Custom(CustomRequestError.TaskCanceled, te.Message));
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         return Error<HttpResponseMessage, RequestError>(RequestError.Custom(CustomRequestError.Unknown, e.Message));
-    //     }
-    // }
+    public static long? GetHeaderLongValue(this HttpResponseMessage msg, string name)
+        => msg.GetHeaderValue(name)?.ParseLong();
 
-
-
-    // public static Task<string> GetStringAsync(Settings settings)
-    //     =>(from n in RawRunAsync(settings, false)
-    //        from m in n.Content.ReadAsStringAsync()
-    //        select m)
-    //         .MapRequestException();
-
-    // public static Func<Task<HttpResponseMessage>> RunAsyncApply(Settings settings)
-    //     => () => RunAsync(settings);
-
-    // public static Func<Task<string>> GetStringAsyncApply(Settings settings)
-    //     => () => GetStringAsync(settings);
-
-    // /// <summary>
-    // /// Gets the response stream as LengthStream with content length
-    // /// </summary>
-    // /// <param name="msg"></param>
-    // /// <returns></returns>
-    // public static Stream GetResponseStream(this HttpResponseMessage msg)
-    //     => msg
-    //         .Content
-    //         .ReadAsStream()
-    //         .WithLength(msg.Content.Headers.ContentLength ?? 0);
-
-    // public static string? GetHeaderValue(this HttpResponseMessage msg, string name)
-    //     => msg.Headers.TryGetValues(name, out var res)
-    //     ? res.First()
-    //     : msg.Content.Headers.TryGetValues(name, out var contentRes)
-    //         ? contentRes.First()
-    //         : null;
-
-    // public static long? GetHeaderLongValue(this HttpResponseMessage msg, string name)
-    //     => msg.GetHeaderValue(name)?.ParseLong();
-
-
-
+    public static Task<string> GetStringAsync(Settings settings)
+        => (from n in RawRunAsync(settings, false)
+            from m in n.Content.ReadAsStringAsync()
+            select m)
+            .MapRequestException();
 }
