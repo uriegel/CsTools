@@ -4,13 +4,16 @@ namespace CsTools;
 
 public static class ProcessCmd
 {
+    public static Task<string> RunAsync(string fileName, string args, InputParams inputParams)
+        => RawRunAsync(fileName, args, inputParams)
+            .MapException(e => new ProcessCmdException(e));
 
     public static Task<string> RunAsync(string fileName, string args)
-        => RawRunAsync(fileName, args)
+        => RawRunAsync(fileName, args, null)
             .MapException(e => new ProcessCmdException(e));
 
 
-    static async Task<string> RawRunAsync(string fileName, string args)
+    static async Task<string> RawRunAsync(string fileName, string args, InputParams? inputParams)
     {
         var proc = await new System.Diagnostics.Process
         {
@@ -25,9 +28,19 @@ public static class ProcessCmd
         }
             .SideEffect(p => p.Start())
             .SideEffectAsync(p => p.WaitForExitAsync());
-        
-        return 
-            (await proc.StandardOutput.ReadToEndAsync()).WhiteSpaceToNull()
-            ?? throw new ProcessCmdException((await proc.StandardError.ReadToEndAsync()).WhiteSpaceToNull(), proc.ExitCode);
+
+        if (inputParams?.ThrowOnStandardError == true)
+        {
+            var errorOutput = (await proc.StandardError.ReadToEndAsync()).WhiteSpaceToNull();    
+            if (errorOutput != null)
+                throw new ProcessCmdException(errorOutput, proc.ExitCode);    
+        }
+        if (inputParams?.ExitErrorOk.HasValue == true && inputParams.ExitErrorOk.Value != proc.ExitCode)
+            throw new ProcessCmdException($"Error in running {fileName}, error code: {proc.ExitCode}", proc.ExitCode);
+        return await proc.StandardOutput.ReadToEndAsync();
     }
+
+    public record InputParams(int? ExitErrorOk, bool ThrowOnStandardError);
 }
+
+

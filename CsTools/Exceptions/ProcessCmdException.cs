@@ -2,7 +2,7 @@ namespace CsTools;
 
 public class ProcessCmdException : Exception
 {
-    public int? ExitCode{ get; }
+    public int? ExitCode { get; }
 
     internal ProcessCmdException(string? error, int code) 
         : base(error)

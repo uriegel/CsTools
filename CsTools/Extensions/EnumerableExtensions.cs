@@ -78,7 +78,7 @@ public static class IEnumerableExtensions
     }
 
     /// <summary>
-    /// Transform a enumerable to an Enumerable with an Enumerable of fixed size of items
+    /// Transform an enumerable to an Enumerable with an Enumerable of fixed size of items
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="source"></param>

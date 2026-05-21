@@ -4,7 +4,7 @@
   <targetFramework>net10.0</targetFramework>
 	<ImplicitUsings>enable</ImplicitUsings>
 	<Nullable>enable</Nullable>
-	<Version>9.0.1</Version>
+	<Version>9.0.2</Version>
 	<Authors>Uwe Riegel</Authors>
 	<Company>Uwe Riegel</Company>		
 	<Description>Tools for C#, mostly functional extensions for .NET Objects</Description>
