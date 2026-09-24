@@ -14,22 +14,20 @@ public static class NumberExtensions
             .FromUnixTimeMilliseconds(unixTimeInMilliseconds)
             .LocalDateTime;
 
-    public static string ByteCountToString(this long byteCounts, int decimalPlaces)
+    public static string ByteCountToString(this long byteCount, int decimalPlaces)
     {
-        var gb = Math.Floor((double)byteCounts / (1024 * 1024 * 1024));
-        var mb = byteCounts % (1024 * 1024 * 1024);
-        if (gb >= 1.0)
-            return $"{gb}{CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator}{mb.ToString()[0..decimalPlaces]} GB";
-        var mb2 = Math.Floor((double)byteCounts / (1024 * 1024));
-        var kb = byteCounts % (1024 * 1024);
-        if (mb2 >= 1.0)
-            return $"{mb2}{CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator}{kb.ToString()[0..decimalPlaces]} MB";
-        var kb2 = Math.Floor((double)byteCounts / 1024);
-        var b = byteCounts % 1024;
-        if (kb2 >= 1.0)
-            return $"{kb2}{CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator}{b.ToString()[0..decimalPlaces]} KB";
-        else
-            return $"{b} B";
+        string format = "0." + new string('#', decimalPlaces);
+
+        if (byteCount >= 1024L * 1024 * 1024)
+            return $"{((double)byteCount / (1024 * 1024 * 1024)).ToString(format)} GB";
+
+        if (byteCount >= 1024L * 1024)
+            return $"{((double)byteCount / (1024 * 1024)).ToString(format)} MB";
+
+        if (byteCount >= 1024)
+            return $"{((double)byteCount / 1024).ToString(format)} KB";
+
+        return $"{byteCount} B";
     }
 
     public static string FormatSeconds(this int secsString)
